@@ -1,6 +1,7 @@
 import AlteryxPythonSDK
 import xml.etree.ElementTree as ET
-
+from faker import Factory
+fake = Factory.create()
 
 class AyxPlugin:
     def __init__(self, n_tool_id, alteryx_engine, generic_engine, output_anchor_mgr):
@@ -8,7 +9,7 @@ class AyxPlugin:
 
         # miscellaneous variables
         self.n_tool_id = n_tool_id
-        self.name = str('PyRecordID_') + str(self.n_tool_id)
+        self.name = str('FakeDataGenerator_') + str(self.n_tool_id)
         self.initialized = False
 
         # engine handles
@@ -31,6 +32,9 @@ class AyxPlugin:
         self.n_record_count = None
         self.output_type = None
 
+        self.numRecords = 0
+        self.fakeFields = {}
+
         return
 
     def output_message(self, method, status, message):
@@ -42,18 +46,18 @@ class AyxPlugin:
     #
     def pi_init(self, str_xml):
         try:
+            self.output_message('xml', AlteryxPythonSDK.EngineMessageType.info, str_xml) # DEBUG
             root = ET.fromstring(str_xml)
-            self.str_record_id = root.find('FieldName').text
-            self.n_record_count = int(root.find('StartValue').text) - 1
-            t = root.find('FieldType').text
-            if t == 'Int16':
-                self.output_type = AlteryxPythonSDK.FieldType.int16
-            elif t == 'Int32':
-                self.output_type = AlteryxPythonSDK.FieldType.int32
-            elif t == 'Int64':
-                self.output_type = AlteryxPythonSDK.FieldType.int64
+            self.numRecords = root.find('numRecords').text
+            self.output_message('numRecords', AlteryxPythonSDK.EngineMessageType.info, self.numRecords) # DEBUG
+            # self.n_record_count = int(root.find('StartValue').text) - 1
+            fieldName = root.find('columnName').text
+            self.output_message('columnName', AlteryxPythonSDK.EngineMessageType.info, fieldName) # DEBUG
+            fakerProvider = root.find('fakerProvider').text
+            self.output_message('fakerProvider', AlteryxPythonSDK.EngineMessageType.info, fakerProvider) # DEBUG
+            self.fakeFields[fieldName] = fakerProvider
         except AttributeError:
-            self.output_message('pi_init', AlteryxPythonSDK.EngineMessageType.error, 'Invalid XML: ' + str_xml)
+            self.output_message('pi_init', AlteryxPythonSDK.EngineMessageType.info, 'Invalid XML: ' + str_xml)
             raise
 
         #
@@ -86,90 +90,62 @@ class AyxPlugin:
     # pi_push_all_records will be called if there are no inputs connected to this tool
     #
     def pi_push_all_records(self, n_record_limit):
-        self.output_message(
-            'pi_push_all_records'
-            , AlteryxPythonSDK.EngineMessageType.error
-            , 'Missing Incoming Connection'
-        )
+        record_info = AlteryxPythonSDK.RecordInfo(self.generic_engine)
 
-        return False
+        self.output_message('fakeFields', AlteryxPythonSDK.EngineMessageType.info, self.fakeFields) # DEBUG
+        for fieldName, fieldProvider in self.fakeFields.items():
+            self.output_message('fieldName', AlteryxPythonSDK.EngineMessageType.info, fieldName)
+            self.output_message('fieldProvider', AlteryxPythonSDK.EngineMessageType.info, fieldProvider)
+            # add_field(field_name, type, size, scale, source, description)
+
+            record_info.add_field(
+                fieldName,
+                AlteryxPythonSDK.FieldType.v_wstring, # support other data types in the future
+                10000,
+                0,
+                self.name,
+                'A generated field'
+            )
+
+        self.output_anchor.init(record_info, '')
+        self.output_message('fakeFieldsLength', AlteryxPythonSDK.EngineMessageType.info, len(self.fakeFields)) # DEBUG
+        self.record_creator = record_info.construct_record_creator()
+        self.output_message('recordFieldsLength', AlteryxPythonSDK.EngineMessageType.info, record_info.num_fields) # DEBUG
+        for i in range(0, int(self.numRecords)):
+            # output_field = record[0]
+            # set from v string for every single field
+            for field_num in range(0, record_info.num_fields):
+                field = record_info[field_num]
+                field.set_from_string(self.record_creator, 'sdf')
+                self.output_message('field description', AlteryxPythonSDK.EngineMessageType.info, field.description)
+            out_record = self.record_creator.finalize_record()
+            self.output_anchor.push_record(out_record, False)
+            self.record_creator.reset(0)
+
+        return True
 
     #
     # ii_init will be called when an incoming connection has been initalized and has told the Engine
     #   what its output will look like. record_info_in represents what the incoming record will look like
     #
     def ii_init(self, record_info_in):
-        self.record_info_in = record_info_in
-
-        self.record_info_out = self.record_info_in.clone()
-        #
-        # add the new field we'll be writing to in the output stream
-        #
-        self.record_info_out.add_field(self.str_record_id, self.output_type)
-
-        #
-        # tell the downstream tools what our output will look like
-        #
-        self.output_anchor.init(self.record_info_out)
-
-        #
-        # create the helper for constructing records to pass downstream
-        #
-        self.record_creator = self.record_info_out.construct_record_creator()
-
-        #
-        # setup the record_copier for copying data from the input records into our new output records
-        #
-        self.record_copier = AlteryxPythonSDK.RecordCopier(self.record_info_out, self.record_info_in)
-        # map each column of the input to where we want it to be in the output
-        for idx in range(len(self.record_info_in)):
-            self.record_copier.add(idx, idx)
-        self.record_copier.done_adding()
-
-        #
-        # grab the index of our new field in the record, so we don't have to do a string lookup on every push_record
-        #
-        self.output_field = self.record_info_out[self.record_info_out.get_field_num(self.str_record_id)]
-
-        self.initialized = True
-
-        return True
+        self.output_message(
+            'ii_init'
+            , AlteryxPythonSDK.EngineMessageType.error
+            , 'This tool does not accept an Incoming Connection'
+        )
+        return False
 
     #
     # ii_push_record will be called every time we get a new record from the upstream tool
     #
     def ii_push_record(self, in_record):
-        if self.initialized is not True:
-            return False
-
-        #
-        # increment our custom record_count variable by 1 to show we have a new record
-        #
-        self.n_record_count += 1
-
-        #
-        # copy the data from the incoming record into the outgoing record
-        #
-        self.record_creator.reset()
-        self.record_copier.copy(self.record_creator, in_record)
-
-        #
-        # set the value on our new column in the record_creator helper to be the new record_count
-        #
-        self.output_field.set_from_int64(self.record_creator, self.n_record_count)
-
-        #
-        # ask the record_creator helper to give us a record we can pass downstream
-        #
-        out_record = self.record_creator.finalize_record()
-
-        #
-        # push the record downstream and quit if there's a downstream error
-        #
-        if self.output_anchor.push_record(out_record) is False:
-            return False
-
-        return True
+        self.output_message(
+            'ii_push_record'
+            , AlteryxPythonSDK.EngineMessageType.error
+            , 'This tool does not accept an Incoming Connection'
+        )
+        return False
 
     #
     # ii_update_progress will be called periodically from the upstream tools, where they will tell us how far along
@@ -177,18 +153,20 @@ class AyxPlugin:
     #   do, that logic should happen in here
     #
     def ii_update_progress(self, d_percent):
-        self.alteryx_engine.output_tool_progress(self.n_tool_id, d_percent)
-
-        self.output_anchor.update_progress(d_percent)
-
+        self.output_message(
+            'ii_update_progress'
+            , AlteryxPythonSDK.EngineMessageType.error
+            , 'This tool does not accept an Incoming Connection'
+        )
         return
 
     #
     # ii_close will be called when the upstream tool is finished
     #
     def ii_close(self):
-        self.output_anchor.close()
-
+        self.output_message(
+            'ii_close'
+            , AlteryxPythonSDK.EngineMessageType.error
+            , 'This tool does not accept an Incoming Connection'
+        )
         return
-
-

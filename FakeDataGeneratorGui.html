@@ -2,53 +2,127 @@
 <html style="padding:20px">
 <head>
   <meta charset="utf-8">
-  <title>PyRecordID</title>
+  <title>Fake Data Generator</title>
 
   <script type="text/javascript">
     document.write('<link rel="import" href="' + window.Alteryx.LibDir + '2/lib/includes.html">');
   </script>
 </head>
 <body>
-  <form>
     <fieldset>
-      <legend class='blueTitle'>XMSG("Create New Column")</legend>
-      <div class='leftCon'>
-        <label>XMSG("Name")</label>
-        <ayx data-ui-props="{type: 'TextBox'}" data-item-props="{dataName: 'FieldName'}"></ayx>
-      </div>
+      <legend class='blueTitle'>Options</legend>
       <div class='rightCon'>
-        <label><span id="startValText">XMSG("Starting Value")</span></label>
-          <ayx data-ui-props="{type: 'NumericSpinner'}" data-item-props="{dataName: 'StartValue'}"></ayx>
+        <label>Number of Records to generate</label>
+          <ayx data-ui-props="{type: 'NumericSpinner', widgetId: 'numRecordsSpinner'}" data-item-props="{dataName: 'numRecords'}"></ayx>
       </div>
-    </fieldset>
+
+   </fieldset>
 
     <fieldset>
-      <legend class='blueTitle'>XMSG("Options")</legend>
-      <div class='leftCon'>
-        <label>XMSG("Type")</label>
-          <ayx data-ui-props="{type: 'DropDown'}", data-item-props="{dataName: 'FieldType'}">
-          </ayx>
+      <legend class='blueTitle'>Column Builder</legend>
+      <div id="container" class="container">
+        <div id="row" class="row">
+          <label>Column Name</label>
+          <ayx data-ui-props="{type: 'TextBox', widgetId: 'columnNameTextBox', 'placeholder': 'Enter new column name here'}" data-item-props="{dataName: 'columnName'}"></ayx>
+          <label>XMSG("Provider")</label>
+          <ayx data-ui-props="{type: 'DropDown', widgetId: 'providerDropDown'}", data-item-props="window.Alteryx.Gui.FakeDataGenerator.fakerProviderDataItemConfig"></ayx>
+        </div>
       </div>
+      <div class='accordion-add' onclick='Alteryx.Gui.FakeDataGenerator.addColumn()'></div>
     </fieldset>
-  </form>
 
   <script type="text/javascript">
 
+     function appendAyxTagToTarget ({targetEl, dataItemProps, uiProps}) {
+      const ayxTag = document.createElement('ayx')
+      ayxTag.setAttribute('data-ui-props', `${JSON.stringify(uiProps)}`)
+//      ayxTag.setAttribute('data-item-props', `${JSON.stringify(dataItemProps)}`)
+      targetEl.appendChild(ayxTag)
+    }
+
+    window.Alteryx.Gui.FakeDataGenerator = {
+      fakerProviderDataItemConfig: {
+        dataName: 'fakerProvider',
+        optionList: [
+          {
+            value: 'address',
+            label: 'Address'
+          },
+          {
+            value: 'country',
+            label: 'Country'
+          }
+        ]
+      },
+      addColumn: function () {
+        // add container
+        const row = document.createElement('div')
+        row.className = 'row'
+
+        // add textbox label
+        const textBoxLabel = document.createElement('label')
+        textBoxLabel.innerText = 'Column Name'
+        row.appendChild(textBoxLabel)
+
+        // add textbox
+        const textBoxUniqueId = Math.random() + Date.now()
+        const textBoxDataItemProps = {
+          dataName: `columnName_${textBoxUniqueId}`,
+        }
+
+        const textBoxUIProps = {
+          type: 'TextBox',
+          widgetId: `columnName_${textBoxUniqueId}`,
+          placeholder: 'Enter new column name here'
+        }
+
+        appendAyxTagToTarget({
+          targetEl: row,
+          dataItemProps: textBoxDataItemProps,
+          uiProps: textBoxUIProps
+        })
+
+        // add dropdown label
+        const dropDownLabel = document.createElement('label')
+        dropDownLabel.innerText = 'Type'
+        row.appendChild(dropDownLabel)
+
+        // add dropdown
+        const providerUniqueId = Math.random() + Date.now()
+        const providerDataItemProps = {
+          dataName: `providerType_${providerUniqueId}`,
+          optionList: window.Alteryx.Gui.FakeDataGenerator.fakerProviderDataItemConfig.optionList,
+        }
+
+        const providerUIProps = {
+          type: 'DropDown',
+          widgetId: `providerType_${providerUniqueId}`,
+        }
+
+        appendAyxTagToTarget({
+          targetEl: row,
+          dataItemProps: providerDataItemProps,
+          uiProps: providerUIProps
+        })
+
+        document.getElementById('container').appendChild(row)
+
+        // render the row
+        window.Alteryx.Gui.Manager.addWidget(row)
+      },
+    }
+
     Alteryx.Gui.BeforeLoad = function (manager, AlteryxDataItems, json) {
-      manager.getDataItem('FieldName').setValue('RecordId')
+      const columnDataItemContainer = new AlteryxDataItems.DataItemContainer('columns')
+      manager.addDataItem(columnDataItemContainer)
 
-      var startValue = manager.getDataItem('StartValue')
-      startValue.setValue(1)
-      startValue.setAllowedPrecision(2)
-      startValue.setMax('9999999999999')
-
-      var fieldType = manager.getDataItem('FieldType')
-      fieldType.setOptionList([
-          { value: 'Int16', label: 'Int16'}
-          , { value: 'Int32', label: 'Int32'}
-          , {value: 'Int64', label: 'Int64'}
-      ])
-      fieldType.setValue('Int16')
+//      const columnNameUniqueId = Math.random() + Date.now()
+//      const columnNameDataItem = new AlteryxDataItems.SimpleString('columnName')
+//      if (json.Configuration) {
+//        Object.keys(json.Configuration).forEach(() => {
+//
+//        })
+//      }
     }
 
   </script>
@@ -60,6 +134,20 @@
       box-sizing: content-box;
       -webkit-box-sizing: content-box;
     }
+
+    .accordion-add {
+      background-image: url('./img/add.png');
+      background-repeat: no-repeat;
+      width: 20px;
+      height: 20px;
+      background-color: #1691c6;
+      background-size: 14px;
+      background-position: 3px;
+      margin-left: calc(100% - 20px);
+      cursor: pointer;
+      clear: both;
+    }
+
   </style>
 </body>
 </html>
