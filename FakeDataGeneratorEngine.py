@@ -1,6 +1,15 @@
 import AlteryxPythonSDK
 import xml.etree.ElementTree as ET
 from faker import Factory
+from enum import Enum
+import random
+
+class LowQualityTypes(Enum):
+    LEADING_SPACE = 1,
+    TRAILING_SPACE = 2,
+    EMPTY = 3,
+    NULL = 4,
+
 
 class AyxPlugin:
     def __init__(self, n_tool_id, alteryx_engine, generic_engine, output_anchor_mgr):
@@ -35,6 +44,8 @@ class AyxPlugin:
         self.fake_fields = {}
         self.locale = ''
         self.fake = None
+        self.is_in_chaos_mode = True
+        self.probability_of_low_quality_data = 50
 
         return
 
@@ -159,6 +170,27 @@ class AyxPlugin:
             return 'No Provider found'
 
         return generated_value
+
+    def should_give_low_quality_value(self, probability_of_low_quality_data):
+        should_give_low_quality_value = False
+        random_number = random.randint(0, 100)
+        if (random_number <= probability_of_low_quality_data):
+            should_give_low_quality_value = True
+
+        return should_give_low_quality_value
+
+    def chaotically_set_field_value(self, field, record_creator):
+        random_low_quality_type = random.choice(list(LowQualityTypes))
+        self.output_message('chaotic type ', AlteryxPythonSDK.EngineMessageType.info,random_low_quality_type) # DEBUG
+        if random_low_quality_type == LowQualityTypes.EMPTY:
+            field.set_null(record_creator)
+        elif random_low_quality_type == LowQualityTypes.NULL:
+            field.set_null(record_creator)
+        else:
+            field.set_null(record_creator)
+
+        return None
+
     #
     # pi_push_all_records will be called if there are no inputs connected to this tool
     #
@@ -177,13 +209,19 @@ class AyxPlugin:
 
         self.output_anchor.init(record_info, '')
         self.record_creator = record_info.construct_record_creator()
-        # self.output_message('recordFieldsLength', AlteryxPythonSDK.EngineMessageType.info, record_info.num_fields) # DEBUG
-        for i in range(0, int(self.num_records)):
+        self.output_message('num records', AlteryxPythonSDK.EngineMessageType.info, self.num_records) # DEBUG
+        num_records = int(self.num_records)
+        for i in range(0, num_records):
             j = 0
             for field_name, field_provider in self.fake_fields.items():
                 field = record_info[j]
-                field_value = str(self.get_generated_value_from_provider(field_provider)) # TODO eventually generate different types besides string
-                field.set_from_string(self.record_creator, field_value)
+                if (self.is_in_chaos_mode and self.should_give_low_quality_value(self.probability_of_low_quality_data)):
+                    self.chaotically_set_field_value(field, self.record_creator)
+                    # pass field into method that determines what happens to it
+                else:
+                    field_value = str(self.get_generated_value_from_provider(field_provider))
+                    field.set_from_string(self.record_creator, field_value) # TODO eventually generate different types besides string
+                # pass in field or determine whether or not to set here
                 j = j + 1
 
             out_record = self.record_creator.finalize_record()
