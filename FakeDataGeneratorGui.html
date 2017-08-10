@@ -13,10 +13,15 @@
       <legend class='blueTitle'>Options</legend>
       <div class='rightCon'>
         <label>Number of Records to generate</label>
-        <ayx data-ui-props="{type: 'NumericSpinner', widgetId: 'numRecordsSpinner'}" data-item-props="{dataName: 'NumRecords', value: 10}"></ayx>
+        <ayx data-ui-props="{type: 'NumericSpinner', widgetId: 'numRecordsSpinner'}" data-item-props="{dataName: 'NumRecords', min: 0}"></ayx>
         <label>Locale</label>
-        <ayx data-ui-props="{type: 'DropDown', widgetId: 'localeDropDown', clearable: true}" data-item-props="{dataName: 'Locale', optionList: [{value: 'ja_JP', label: 'Japanese'}, {value: 'dk_DK', label: 'Danish'}, {value: 'ko_KR', label: 'Korean'}, {value: 'it_IT', label: 'Italian'}]}"></ayx>
+        <ayx data-ui-props="{type: 'DropDown', widgetId: 'localeDropDown'}" data-item-props="{dataName: 'Locale', optionList: [{value: 'dk_DK', label: 'Danish'}, {value: 'en_US', label: 'English'}, {value: 'it_IT', label: 'Italian'}, {value: 'ja_JP', label: 'Japanese'}, {value: 'ko_KR', label: 'Korean'}]}"></ayx>
         <ayx data-ui-props="{type: 'CheckBox', widgetId: 'chaosModeCheckBox', label: 'Chaos Mode (F**k my data up)'}" data-item-props="{dataName: 'ChaosMode'}"></ayx>
+        <div class="dataQualityContainer">
+          <label>Data Quality Percentage</label>
+          <ayx style="width: inherit" data-ui-props="{type: 'NumericSpinner', widgetId: 'dataQualitySpinner'}" data-item-props="{dataName: 'DataQualityPercentage', min: 0, max: 100}"></ayx>
+          <span>%  (100=Perfect Data, 0=All Bad Data)</span>
+        </div>
       </div>
 
    </fieldset>
@@ -256,6 +261,14 @@
 
     Alteryx.Gui.BeforeLoad = function (manager, AlteryxDataItems, json) {
       window.Alteryx.Gui.FakeDataGenerator.AlteryxDataItems = AlteryxDataItems
+      const dataQualityPercentageDataItem = manager.getDataItem('DataQualityPercentage')
+      dataQualityPercentageDataItem.setDisabled(true)
+      manager.getDataItem('NumRecords').setValue(10)
+
+      manager.getDataItem('ChaosMode').registerPropertyListener('value', function (event) {
+        // only enable the data quality spinner when the checkbox is checked
+        dataQualityPercentageDataItem.setDisabled(!event.value)
+      })
 
       // create data item containers to make it easier to generate nested xml
       const fakeFieldContainer = new AlteryxDataItems.DataItemContainer('FakeFields')
@@ -276,7 +289,6 @@
       // parse incoming json and add new dom elements if we need to
       const configuration = json.Configuration
       if (configuration) {
-
         // add widgets and data items for any persisted fields
         if (Object.keys(configuration.FakeFields).length) {
           const fakeFields = configuration.FakeFields
@@ -318,6 +330,10 @@
       margin-left: calc(100% - 20px);
       cursor: pointer;
       clear: both;
+    }
+
+    .dataQualityContainer {
+      padding-left: 20px;
     }
 
   </style>

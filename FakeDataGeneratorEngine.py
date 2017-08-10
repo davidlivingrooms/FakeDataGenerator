@@ -10,7 +10,6 @@ class LowQualityTypes(Enum):
     EMPTY = 3,
     NULL = 4,
 
-
 class AyxPlugin:
     def __init__(self, n_tool_id, alteryx_engine, generic_engine, output_anchor_mgr):
         # initialize *all* members that will be used (for PEP8 compliance)
@@ -44,8 +43,8 @@ class AyxPlugin:
         self.fake_fields = {}
         self.locale = ''
         self.fake = None
-        self.is_in_chaos_mode = True
-        self.probability_of_low_quality_data = 50
+        self.is_in_chaos_mode = False
+        self.probability_of_low_quality_data = 0
 
         return
 
@@ -64,6 +63,10 @@ class AyxPlugin:
             locale = root.find('Locale').text
             self.output_message('locale', AlteryxPythonSDK.EngineMessageType.info, locale) # DEBUG
             self.fake = Factory.create(locale)
+            # self.output_message('is_in_chaos_modebool', AlteryxPythonSDK.EngineMessageType.info, root.find('ChaosMode').text) # DEBUG
+            self.is_in_chaos_mode = root.find('ChaosMode').text == 'True'
+            self.probability_of_low_quality_data = 100 - int(root.find('DataQualityPercentage').text)
+            # self.output_message('is_in_chaos_mode', AlteryxPythonSDK.EngineMessageType.info, str(self.is_in_chaos_mode)) # DEBUG
             # self.output_message('locale', AlteryxPythonSDK.EngineMessageType.info, self.locale) # DEBUG
             for field in fake_fields:
                 self.fake_fields[field.find('FieldName').text] = field.find('Provider').text
