@@ -32,7 +32,7 @@ class AyxPlugin:
         self.n_record_count = None
         self.output_type = None
 
-        self.numRecords = 0
+        self.num_records = 0
         self.fakeFields = {}
 
         return
@@ -48,8 +48,8 @@ class AyxPlugin:
         try:
             self.output_message('xml', AlteryxPythonSDK.EngineMessageType.info, str_xml) # DEBUG
             root = ET.fromstring(str_xml)
-            self.numRecords = root.find('numRecords').text
-            self.output_message('numRecords', AlteryxPythonSDK.EngineMessageType.info, self.numRecords) # DEBUG
+            self.num_records = root.find('NumRecords').text
+            self.output_message('num_records', AlteryxPythonSDK.EngineMessageType.info, self.num_records) # DEBUG
             # self.n_record_count = int(root.find('StartValue').text) - 1
             fieldName = root.find('columnName').text
             self.output_message('columnName', AlteryxPythonSDK.EngineMessageType.info, fieldName) # DEBUG
@@ -111,9 +111,7 @@ class AyxPlugin:
         self.output_message('fakeFieldsLength', AlteryxPythonSDK.EngineMessageType.info, len(self.fakeFields)) # DEBUG
         self.record_creator = record_info.construct_record_creator()
         self.output_message('recordFieldsLength', AlteryxPythonSDK.EngineMessageType.info, record_info.num_fields) # DEBUG
-        for i in range(0, int(self.numRecords)):
-            # output_field = record[0]
-            # set from v string for every single field
+        for i in range(0, int(self.num_records)):
             for field_num in range(0, record_info.num_fields):
                 field = record_info[field_num]
                 field.set_from_string(self.record_creator, 'sdf')

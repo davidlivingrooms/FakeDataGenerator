@@ -13,7 +13,7 @@
       <legend class='blueTitle'>Options</legend>
       <div class='rightCon'>
         <label>Number of Records to generate</label>
-          <ayx data-ui-props="{type: 'NumericSpinner', widgetId: 'numRecordsSpinner'}" data-item-props="{dataName: 'numRecords'}"></ayx>
+          <ayx data-ui-props="{type: 'NumericSpinner', widgetId: 'numRecordsSpinner'}"></ayx>
       </div>
 
    </fieldset>
@@ -23,26 +23,25 @@
       <div id="container" class="container">
         <div id="row" class="row">
           <label>Column Name</label>
-          <ayx data-ui-props="{type: 'TextBox', widgetId: 'columnNameTextBox', 'placeholder': 'Enter new column name here'}" data-item-props="{dataName: 'columnName'}"></ayx>
+          <ayx data-ui-props="{type: 'TextBox', widgetId: 'fieldNameTextBox', 'placeholder': 'Enter new column name here'}"></ayx>
           <label>XMSG("Provider")</label>
-          <ayx data-ui-props="{type: 'DropDown', widgetId: 'providerDropDown'}", data-item-props="window.Alteryx.Gui.FakeDataGenerator.fakerProviderDataItemConfig"></ayx>
+          <ayx data-ui-props="{type: 'DropDown', widgetId: 'providerDropDown'}"></ayx>
         </div>
       </div>
-      <div class='accordion-add' onclick='Alteryx.Gui.FakeDataGenerator.addColumn()'></div>
+      <div class='accordion-add' onclick='Alteryx.Gui.FakeDataGenerator.addNewColumn()'></div>
     </fieldset>
 
   <script type="text/javascript">
 
-     function appendAyxTagToTarget ({targetEl, dataItemProps, uiProps}) {
+     function appendAyxTagToTarget ({targetEl, uiProps}) {
       const ayxTag = document.createElement('ayx')
       ayxTag.setAttribute('data-ui-props', `${JSON.stringify(uiProps)}`)
-//      ayxTag.setAttribute('data-item-props', `${JSON.stringify(dataItemProps)}`)
       targetEl.appendChild(ayxTag)
     }
 
     window.Alteryx.Gui.FakeDataGenerator = {
       fakerProviderDataItemConfig: {
-        dataName: 'fakerProvider',
+        dataName: 'FakerProvider',
         optionList: [
           {
             value: 'address',
@@ -54,7 +53,14 @@
           }
         ]
       },
-      addColumn: function () {
+      addNewColumn: function () {
+        const fieldId = 'Field_' + Math.random() + Date.now()
+        window.Alteryx.Gui.FakeDataGenerator.addColumn({fieldId})
+      },
+      addColumn: function ({providerValue, fieldNameValue, fieldId}) {
+        const fieldNameId =  'fieldNameTextBox_' + Math.random() + Date.now()
+        const providerId = 'providerDropDown_' + Math.random() + Date.now()
+
         // add container
         const row = document.createElement('div')
         row.className = 'row'
@@ -65,64 +71,109 @@
         row.appendChild(textBoxLabel)
 
         // add textbox
-        const textBoxUniqueId = Math.random() + Date.now()
-        const textBoxDataItemProps = {
-          dataName: `columnName_${textBoxUniqueId}`,
-        }
-
         const textBoxUIProps = {
           type: 'TextBox',
-          widgetId: `columnName_${textBoxUniqueId}`,
+          widgetId: fieldNameId,
           placeholder: 'Enter new column name here'
         }
 
         appendAyxTagToTarget({
           targetEl: row,
-          dataItemProps: textBoxDataItemProps,
           uiProps: textBoxUIProps
         })
 
         // add dropdown label
         const dropDownLabel = document.createElement('label')
-        dropDownLabel.innerText = 'Type'
+        dropDownLabel.innerText = 'Generator Type'
         row.appendChild(dropDownLabel)
 
         // add dropdown
-        const providerUniqueId = Math.random() + Date.now()
-        const providerDataItemProps = {
-          dataName: `providerType_${providerUniqueId}`,
-          optionList: window.Alteryx.Gui.FakeDataGenerator.fakerProviderDataItemConfig.optionList,
-        }
-
         const providerUIProps = {
           type: 'DropDown',
-          widgetId: `providerType_${providerUniqueId}`,
+          widgetId: providerId,
         }
 
         appendAyxTagToTarget({
           targetEl: row,
-          dataItemProps: providerDataItemProps,
           uiProps: providerUIProps
         })
 
         document.getElementById('container').appendChild(row)
 
-        // render the row
+        // render the row so that the widget id is available
         window.Alteryx.Gui.Manager.addWidget(row)
+
+        const alteryxDataItems = window.Alteryx.Gui.FakeDataGenerator.AlteryxDataItems
+        const manager = window.Alteryx.Gui.Manager
+
+        // create and add data item container to parent
+        const fieldContainer = new alteryxDataItems.DataItemContainer(fieldId)
+
+        const simpleString = new alteryxDataItems.SimpleString('FieldName')
+        if (fieldNameValue) {
+          simpleString.setValue(fieldNameValue)
+        }
+
+
+        const stringSelector = new alteryxDataItems.StringSelector('Provider')
+        stringSelector.setOptionList(window.Alteryx.Gui.FakeDataGenerator.fakerProviderDataItemConfig.optionList)
+
+        if (providerValue) {
+          stringSelector.setValue(providerValue)
+        }
+
+        manager.bindDataItemToWidget(simpleString, fieldNameId)
+        manager.bindDataItemToWidget(stringSelector, providerId)
+        fieldContainer.addDataItem(simpleString)
+        fieldContainer.addDataItem(stringSelector)
+        manager.getDataItem('FakeFields').addDataItem(fieldContainer)
       },
     }
 
     Alteryx.Gui.BeforeLoad = function (manager, AlteryxDataItems, json) {
-      const columnDataItemContainer = new AlteryxDataItems.DataItemContainer('columns')
-      manager.addDataItem(columnDataItemContainer)
+      window.Alteryx.Gui.FakeDataGenerator.AlteryxDataItems = AlteryxDataItems
+      const constrainedFloat = new AlteryxDataItems.ConstrainedFloat('NumRecords')
+      manager.bindDataItemToWidget(constrainedFloat, 'numRecordsSpinner')
+      manager.addDataItem(constrainedFloat)
 
-//      const columnNameUniqueId = Math.random() + Date.now()
-//      const columnNameDataItem = new AlteryxDataItems.SimpleString('columnName')
-//      if (json.Configuration) {
-//        Object.keys(json.Configuration).forEach(() => {
-//
-//        })
-//      }
+      // create data item containers to make it easier to generate nested xml
+      const fakeFieldContainer = new AlteryxDataItems.DataItemContainer('FakeFields')
+      manager.addDataItem(fakeFieldContainer)
+
+      // each field will be in its own data item container
+      const fieldContainer = new AlteryxDataItems.DataItemContainer('Field')
+      const simpleString = new AlteryxDataItems.SimpleString('FieldName')
+      const stringSelector = new AlteryxDataItems.StringSelector('Provider')
+      stringSelector.setOptionList(window.Alteryx.Gui.FakeDataGenerator.fakerProviderDataItemConfig.optionList)
+      manager.bindDataItemToWidget(simpleString, 'fieldNameTextBox')
+      manager.bindDataItemToWidget(stringSelector, 'providerDropDown')
+      fieldContainer.addDataItem(simpleString)
+      fieldContainer.addDataItem(stringSelector)
+
+      fakeFieldContainer.addDataItem(fieldContainer)
+
+      // parse incoming json and add new dom elements if we need to
+      const configuration = json.Configuration
+      if (configuration) {
+
+        // add widgets and data items for any persisted fields
+        if (Object.keys(configuration.FakeFields).length) {
+          const fakeFields = configuration.FakeFields
+          Object.keys(fakeFields).forEach(function (key) {
+            if (key === 'Field') return // the first one is already in the html and has a data item
+            const field = fakeFields[key]
+            console.log(field.FieldName)
+            console.log(field.Provider)
+
+            // add widgets
+            window.Alteryx.Gui.FakeDataGenerator.addColumn({
+              providerValue: field.Provider,
+              fieldNameValue: field.FieldName,
+              fieldId: key
+            })
+          })
+        }
+      }
     }
 
   </script>
