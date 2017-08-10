@@ -47,6 +47,7 @@
       const dataQualityPercentageDataItem = manager.getDataItem('DataQualityPercentage')
       dataQualityPercentageDataItem.setDisabled(true)
       manager.getDataItem('NumRecords').setValue(10)
+      manager.getDataItem('Locale').setValue('en_US')
 
       manager.getDataItem('ChaosMode').registerPropertyListener('value', function (event) {
         // only enable the data quality spinner when the checkbox is checked
