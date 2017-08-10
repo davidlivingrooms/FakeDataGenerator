@@ -13,7 +13,9 @@
       <legend class='blueTitle'>Options</legend>
       <div class='rightCon'>
         <label>Number of Records to generate</label>
-          <ayx data-ui-props="{type: 'NumericSpinner', widgetId: 'numRecordsSpinner'}"></ayx>
+        <ayx data-ui-props="{type: 'NumericSpinner', widgetId: 'numRecordsSpinner'}" data-item-props="{dataName: 'NumRecords', value: 10}"></ayx>
+        <label>Locale</label>
+        <ayx data-ui-props="{type: 'DropDown', widgetId: 'localeDropDown', clearable: true}" data-item-props="{dataName: 'Locale', optionList: [{value: 'ja_JP', label: 'Japanese'}, {value: 'dk_DK', label: 'Danish'}, {value: 'ko_KR', label: 'Korean'}, {value: 'it_IT', label: 'Italian'}]}"></ayx>
       </div>
 
    </fieldset>
@@ -24,7 +26,7 @@
         <div id="row" class="row">
           <label>Column Name</label>
           <ayx data-ui-props="{type: 'TextBox', widgetId: 'fieldNameTextBox', 'placeholder': 'Enter new column name here'}"></ayx>
-          <label>XMSG("Provider")</label>
+          <label>XMSG("Generator Type")</label>
           <ayx data-ui-props="{type: 'DropDown', widgetId: 'providerDropDown'}"></ayx>
         </div>
       </div>
@@ -38,7 +40,7 @@
       ayxTag.setAttribute('data-ui-props', `${JSON.stringify(uiProps)}`)
       targetEl.appendChild(ayxTag)
     }
-
+    // TODO sort option list
     window.Alteryx.Gui.FakeDataGenerator = {
       fakerProviderDataItemConfig: {
         dataName: 'FakerProvider',
@@ -50,9 +52,130 @@
           {
             value: 'country',
             label: 'Country'
-          }
+          },
+          {
+            value: 'name',
+            label: 'Person Name'
+          },
+          {
+            value: 'phone_number',
+            label: 'Phone Number'
+          },
+          {
+            value: 'mac_address',
+            label: 'Mac Address'
+          },
+          {
+            value: 'user_name',
+            label: 'User Name'
+          },
+          {
+            value: 'url',
+            label: 'URL'
+          },
+          {
+            value: 'image_url',
+            label: 'Image URL'
+          },
+          {
+            value: 'bs',
+            label: 'BS buzzwords'
+          },
+          {
+            value: 'company',
+            label: 'Company'
+          },
+          {
+            value: 'day_of_week',
+            label: 'Day of Week'
+          },
+          {
+            value: 'free_email',
+            label: 'Email'
+          },
+          {
+            value: 'job',
+            label: 'Job'
+          },
+          {
+            value: 'ean8',
+            label: 'Barcode(ean8)'
+          },
+          {
+            value: 'credit_card_full',
+            label: 'Credit Card Full'
+          },
+          {
+            value: 'paragraph',
+            label: 'Paragraph'
+          },
+          {
+            value: 'text',
+            label: 'Text'
+          },
+          {
+            value: 'binary',
+            label: 'Binary'
+          },
+          {
+            value: 'file_path',
+            label: 'File Path'
+          },
+          {
+            value: 'sha256',
+            label: 'SHA256'
+          },
+          {
+            value: 'md5',
+            label: 'MD5'
+          },
+          {
+            value: 'password',
+            label: 'Password'
+          },
+          {
+            value: 'license_plate',
+            label: 'License Plate'
+          },
+          {
+            value: 'isbn13',
+            label: 'ISBN(13)'
+          },
+          {
+            value: 'latitude',
+            label: 'Latitude'
+          },
+          {
+            value: 'longitude',
+            label: 'Longitude'
+          },
+          {
+            value: 'ssn',
+            label: 'SSN'
+          },
+          {
+            value: 'user_agent',
+            label: 'User Agent'
+          },
+          {
+            value: 'profile',
+            label: 'Profile'
+          },
+          {
+            value: 'simple_profile',
+            label: 'Simple Profile'
+          },
+          {
+            value: 'ipv4',
+            label: 'IPv4'
+          },
+          {
+            value: 'ipv6',
+            label: 'IPv6'
+          },
         ]
       },
+
       addNewColumn: function () {
         const fieldId = 'Field_' + Math.random() + Date.now()
         window.Alteryx.Gui.FakeDataGenerator.addColumn({fieldId})
@@ -132,9 +255,6 @@
 
     Alteryx.Gui.BeforeLoad = function (manager, AlteryxDataItems, json) {
       window.Alteryx.Gui.FakeDataGenerator.AlteryxDataItems = AlteryxDataItems
-      const constrainedFloat = new AlteryxDataItems.ConstrainedFloat('NumRecords')
-      manager.bindDataItemToWidget(constrainedFloat, 'numRecordsSpinner')
-      manager.addDataItem(constrainedFloat)
 
       // create data item containers to make it easier to generate nested xml
       const fakeFieldContainer = new AlteryxDataItems.DataItemContainer('FakeFields')
