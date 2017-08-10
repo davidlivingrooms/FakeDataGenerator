@@ -16,7 +16,7 @@
         <ayx data-ui-props="{type: 'NumericSpinner', widgetId: 'numRecordsSpinner'}" data-item-props="{dataName: 'NumRecords', min: 0}"></ayx>
         <label>Locale</label>
         <ayx data-ui-props="{type: 'DropDown', widgetId: 'localeDropDown'}" data-item-props="{dataName: 'Locale', optionList: [{value: 'dk_DK', label: 'Danish'}, {value: 'en_US', label: 'English'}, {value: 'it_IT', label: 'Italian'}, {value: 'ja_JP', label: 'Japanese'}, {value: 'ko_KR', label: 'Korean'}]}"></ayx>
-        <ayx data-ui-props="{type: 'CheckBox', widgetId: 'chaosModeCheckBox', label: 'Chaos Mode (F**k my data up)'}" data-item-props="{dataName: 'ChaosMode'}"></ayx>
+        <ayx data-ui-props="{type: 'CheckBox', widgetId: 'chaosModeCheckBox', label: 'Chaos Mode'}" data-item-props="{dataName: 'ChaosMode'}"></ayx>
         <div class="dataQualityContainer">
           <label>Data Quality Percentage</label>
           <ayx style="width: inherit" data-ui-props="{type: 'NumericSpinner', widgetId: 'dataQualitySpinner'}" data-item-props="{dataName: 'DataQualityPercentage', min: 0, max: 100}"></ayx>
@@ -36,230 +36,13 @@
           <ayx data-ui-props="{type: 'DropDown', widgetId: 'providerDropDown'}"></ayx>
         </div>
       </div>
-      <div class='accordion-add' onclick='Alteryx.Gui.FakeDataGenerator.addNewColumn()'></div>
+      <div class='accordion-add' onclick='fakeDataGenerator.addNewColumn()'></div>
     </fieldset>
 
+  <script src="./fakeDataGenerator.js"></script>
   <script type="text/javascript">
-
-     function appendAyxTagToTarget ({targetEl, uiProps}) {
-      const ayxTag = document.createElement('ayx')
-      ayxTag.setAttribute('data-ui-props', `${JSON.stringify(uiProps)}`)
-      targetEl.appendChild(ayxTag)
-    }
-    // TODO sort option list
-    window.Alteryx.Gui.FakeDataGenerator = {
-      fakerProviderDataItemConfig: {
-        dataName: 'FakerProvider',
-        optionList: [
-          {
-            value: 'address',
-            label: 'Address'
-          },
-          {
-            value: 'country',
-            label: 'Country'
-          },
-          {
-            value: 'name',
-            label: 'Person Name'
-          },
-          {
-            value: 'phone_number',
-            label: 'Phone Number'
-          },
-          {
-            value: 'mac_address',
-            label: 'Mac Address'
-          },
-          {
-            value: 'user_name',
-            label: 'User Name'
-          },
-          {
-            value: 'url',
-            label: 'URL'
-          },
-          {
-            value: 'image_url',
-            label: 'Image URL'
-          },
-          {
-            value: 'bs',
-            label: 'BS buzzwords'
-          },
-          {
-            value: 'company',
-            label: 'Company'
-          },
-          {
-            value: 'day_of_week',
-            label: 'Day of Week'
-          },
-          {
-            value: 'free_email',
-            label: 'Email'
-          },
-          {
-            value: 'job',
-            label: 'Job'
-          },
-          {
-            value: 'ean8',
-            label: 'Barcode(ean8)'
-          },
-          {
-            value: 'credit_card_full',
-            label: 'Credit Card Full'
-          },
-          {
-            value: 'paragraph',
-            label: 'Paragraph'
-          },
-          {
-            value: 'text',
-            label: 'Text'
-          },
-          {
-            value: 'binary',
-            label: 'Binary'
-          },
-          {
-            value: 'file_path',
-            label: 'File Path'
-          },
-          {
-            value: 'sha256',
-            label: 'SHA256'
-          },
-          {
-            value: 'md5',
-            label: 'MD5'
-          },
-          {
-            value: 'password',
-            label: 'Password'
-          },
-          {
-            value: 'license_plate',
-            label: 'License Plate'
-          },
-          {
-            value: 'isbn13',
-            label: 'ISBN(13)'
-          },
-          {
-            value: 'latitude',
-            label: 'Latitude'
-          },
-          {
-            value: 'longitude',
-            label: 'Longitude'
-          },
-          {
-            value: 'ssn',
-            label: 'SSN'
-          },
-          {
-            value: 'user_agent',
-            label: 'User Agent'
-          },
-          {
-            value: 'profile',
-            label: 'Profile'
-          },
-          {
-            value: 'simple_profile',
-            label: 'Simple Profile'
-          },
-          {
-            value: 'ipv4',
-            label: 'IPv4'
-          },
-          {
-            value: 'ipv6',
-            label: 'IPv6'
-          },
-        ]
-      },
-
-      addNewColumn: function () {
-        const fieldId = 'Field_' + Math.random() + Date.now()
-        window.Alteryx.Gui.FakeDataGenerator.addColumn({fieldId})
-      },
-      addColumn: function ({providerValue, fieldNameValue, fieldId}) {
-        const fieldNameId =  'fieldNameTextBox_' + Math.random() + Date.now()
-        const providerId = 'providerDropDown_' + Math.random() + Date.now()
-
-        // add container
-        const row = document.createElement('div')
-        row.className = 'row'
-
-        // add textbox label
-        const textBoxLabel = document.createElement('label')
-        textBoxLabel.innerText = 'Column Name'
-        row.appendChild(textBoxLabel)
-
-        // add textbox
-        const textBoxUIProps = {
-          type: 'TextBox',
-          widgetId: fieldNameId,
-          placeholder: 'Enter new column name here'
-        }
-
-        appendAyxTagToTarget({
-          targetEl: row,
-          uiProps: textBoxUIProps
-        })
-
-        // add dropdown label
-        const dropDownLabel = document.createElement('label')
-        dropDownLabel.innerText = 'Generator Type'
-        row.appendChild(dropDownLabel)
-
-        // add dropdown
-        const providerUIProps = {
-          type: 'DropDown',
-          widgetId: providerId,
-        }
-
-        appendAyxTagToTarget({
-          targetEl: row,
-          uiProps: providerUIProps
-        })
-
-        document.getElementById('container').appendChild(row)
-
-        // render the row so that the widget id is available
-        window.Alteryx.Gui.Manager.addWidget(row)
-
-        const alteryxDataItems = window.Alteryx.Gui.FakeDataGenerator.AlteryxDataItems
-        const manager = window.Alteryx.Gui.Manager
-
-        // create and add data item container to parent
-        const fieldContainer = new alteryxDataItems.DataItemContainer(fieldId)
-
-        const simpleString = new alteryxDataItems.SimpleString('FieldName')
-        if (fieldNameValue) {
-          simpleString.setValue(fieldNameValue)
-        }
-
-
-        const stringSelector = new alteryxDataItems.StringSelector('Provider')
-        stringSelector.setOptionList(window.Alteryx.Gui.FakeDataGenerator.fakerProviderDataItemConfig.optionList)
-
-        if (providerValue) {
-          stringSelector.setValue(providerValue)
-        }
-
-        manager.bindDataItemToWidget(simpleString, fieldNameId)
-        manager.bindDataItemToWidget(stringSelector, providerId)
-        fieldContainer.addDataItem(simpleString)
-        fieldContainer.addDataItem(stringSelector)
-        manager.getDataItem('FakeFields').addDataItem(fieldContainer)
-      },
-    }
-
     Alteryx.Gui.BeforeLoad = function (manager, AlteryxDataItems, json) {
+      window.Alteryx.Gui.FakeDataGenerator = {}
       window.Alteryx.Gui.FakeDataGenerator.AlteryxDataItems = AlteryxDataItems
       const dataQualityPercentageDataItem = manager.getDataItem('DataQualityPercentage')
       dataQualityPercentageDataItem.setDisabled(true)
@@ -278,7 +61,7 @@
       const fieldContainer = new AlteryxDataItems.DataItemContainer('Field')
       const simpleString = new AlteryxDataItems.SimpleString('FieldName')
       const stringSelector = new AlteryxDataItems.StringSelector('Provider')
-      stringSelector.setOptionList(window.Alteryx.Gui.FakeDataGenerator.fakerProviderDataItemConfig.optionList)
+      stringSelector.setOptionList(fakeDataGenerator.getGeneratorTypeOptionList())
       manager.bindDataItemToWidget(simpleString, 'fieldNameTextBox')
       manager.bindDataItemToWidget(stringSelector, 'providerDropDown')
       fieldContainer.addDataItem(simpleString)
@@ -299,7 +82,7 @@
             console.log(field.Provider)
 
             // add widgets
-            window.Alteryx.Gui.FakeDataGenerator.addColumn({
+            fakeDataGenerator.addColumn({
               providerValue: field.Provider,
               fieldNameValue: field.FieldName,
               fieldId: key
