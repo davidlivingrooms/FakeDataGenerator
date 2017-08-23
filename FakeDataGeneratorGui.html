@@ -7,11 +7,15 @@
   <script type="text/javascript">
     document.write('<link rel="import" href="' + window.Alteryx.LibDir + '2/lib/includes.html">');
   </script>
+  <link rel="stylesheet" href="./vendor/jquery-ui.min.css">
+  <script src="./vendor/jquery-3.2.1.min.js"></script>
+  <script src="./vendor/jquery-ui.min.js"></script>
 </head>
 <body>
     <fieldset>
       <legend class='blueTitle'>Options</legend>
-      <div class='rightCon'>
+
+      <div>
         <label>Number of Records to generate</label>
         <ayx data-ui-props="{type: 'NumericSpinner', widgetId: 'numRecordsSpinner'}" data-item-props="{dataName: 'NumRecords', min: 0}"></ayx>
         <label>Locale</label>
@@ -28,14 +32,19 @@
 
     <fieldset>
       <legend class='blueTitle'>Column Builder</legend>
-      <div id="container" class="container">
-        <div id="row" class="row">
-          <label>Column Name</label>
-          <ayx data-ui-props="{type: 'TextBox', widgetId: 'fieldNameTextBox', 'placeholder': 'Enter new column name here'}"></ayx>
-          <label>XMSG("Generator Type")</label>
-          <ayx data-ui-props="{type: 'DropDown', widgetId: 'providerDropDown'}"></ayx>
+      <div id="accordion">
+        <div class="group">
+          <h3>Column</h3>
+          <div >
+            <label>Column Name</label>
+            <ayx data-ui-props="{type: 'TextBox', widgetId: 'fieldNameTextBox', 'placeholder': 'Enter new column name here'}"></ayx>
+            <label>XMSG("Generator Type")</label>
+            <ayx data-ui-props="{type: 'DropDown', widgetId: 'providerDropDown'}"></ayx>
+            <ayx data-ui-props="{type: 'Button', widgetId: 'deleteColumnButton', label: 'Delete Column'}"></ayx>
+
+          </div>
         </div>
-      </div>
+      </div>    
       <div class='accordion-add' onclick='fakeDataGenerator.addNewColumn()'></div>
     </fieldset>
 
@@ -58,8 +67,16 @@
       const fakeFieldContainer = new AlteryxDataItems.DataItemContainer('FakeFields')
       manager.addDataItem(fakeFieldContainer)
 
+      const configuration = json.Configuration
+      let fieldContainerName = ''
+      if (configuration && Object.keys(configuration.FakeFields).length === 1) {
+        fieldContainerName = Object.keys(configuration.FakeFields)[0]
+      } else {
+        fieldContainerName = 'Field'
+      }
+
       // each field will be in its own data item container
-      const fieldContainer = new AlteryxDataItems.DataItemContainer('Field')
+      const fieldContainer = new AlteryxDataItems.DataItemContainer(fieldContainerName)
       const simpleString = new AlteryxDataItems.SimpleString('FieldName')
       const stringSelector = new AlteryxDataItems.StringSelector('Provider')
       stringSelector.setOptionList(fakeDataGenerator.getGeneratorTypeOptionList())
@@ -70,11 +87,13 @@
 
       fakeFieldContainer.addDataItem(fieldContainer)
 
+      // make sure button is properly bound to delete the first one
+      window.Alteryx.Gui.Manager.setProp('deleteColumnButton', 'onClick', fakeDataGenerator.deleteColumn.bind(this, fieldContainerName) )
+
       // parse incoming json and add new dom elements if we need to
-      const configuration = json.Configuration
       if (configuration) {
         // add widgets and data items for any persisted fields
-        if (Object.keys(configuration.FakeFields).length) {
+        if (Object.keys(configuration.FakeFields).length > 1) {
           const fakeFields = configuration.FakeFields
           Object.keys(fakeFields).forEach(function (key) {
             if (key === 'Field') return // the first one is already in the html and has a data item
@@ -94,7 +113,43 @@
     }
 
   </script>
+  <script>
+  $( function() {
+    $( "#accordion" ).accordion({
+        collapsible: true,
+        heightStyle: 'content',
+        clearStyle: true,        
+        autoHeight: true,
+        header: "> div > h3",        
+        create: function( event, ui ) {
+        if (ui.panel[0]) {
+            ui.panel[0].style.overflow = 'visible'
+          }
+        },        
+        beforeActivate: function( event, ui ) {
+          if (ui.oldPanel[0]) {
+            ui.oldPanel[0].style.overflow = 'auto'
+          }
 
+          if (ui.newPanel[0]) {
+            ui.newPanel[0].style.overflow = 'visible'
+          }
+        },  
+    }).sortable({
+        axis: "y",
+        handle: "h3",
+        stop: function( event, ui ) {
+          // Refresh accordion to handle new order
+          $( this ).accordion( "refresh" );
+        }
+      })
+  } )
+
+$('span.ui-icon-trash').click(function(e) {
+
+})
+
+  </script>
   <style>
     /*This styling needs to be here. Is due to file loading. Otherwise, will not get proper styling on dropdowns*/
 
@@ -118,6 +173,20 @@
 
     .dataQualityContainer {
       padding-left: 20px;
+    }
+
+    h3 span {
+      float: right;
+    }
+
+    .alteryx-button {
+      background-color: firebrick !important;
+      margin: auto;
+    }
+
+    .ui-accordion-header {
+      background-color: #1691c6;
+      color: white;
     }
 
   </style>

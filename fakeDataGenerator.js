@@ -4,23 +4,40 @@ const fakeDataGenerator = (function() {
           const ayxTag = document.createElement('ayx')
           ayxTag.setAttribute('data-ui-props', `${JSON.stringify(uiProps)}`)
           targetEl.appendChild(ayxTag)
+          return ayxTag
         },
       addNewColumn: () => {
         const fieldId = 'Field_' + Math.random() + Date.now()
         fakeDataGenerator.addColumn({fieldId})
       },
+      deleteColumn: (fieldContainerDataName, event) => {
+        const fakeFieldsContainer = window.Alteryx.Gui.Manager.getDataItem('FakeFields')
+        if (fakeFieldsContainer.getDataItems().length > 1) {
+          const parent = $(event.target).parent().parent()
+          parent.parent().add(parent).fadeOut('slow',function(){$(this).remove();});
+
+          // remove data item
+          fakeFieldsContainer.removeDataItem(fieldContainerDataName)
+        }
+
+    },
       addColumn: ({providerValue, fieldNameValue, fieldId}) => {
         const fieldNameId =  'fieldNameTextBox_' + Math.random() + Date.now()
         const providerId = 'providerDropDown_' + Math.random() + Date.now()
 
-        // add container
-        const row = document.createElement('div')
-        row.className = 'row'
+        const header = document.createElement('h3')
+        header.innerText = 'Column'
+
+        // add column container
+        const container = document.createElement('div')
+
+        // add column container
+        const columnContainer= document.createElement('div')
 
         // add textbox label
         const textBoxLabel = document.createElement('label')
         textBoxLabel.innerText = 'Column Name'
-        row.appendChild(textBoxLabel)
+        columnContainer.appendChild(textBoxLabel)
 
         // add textbox
         const textBoxUIProps = {
@@ -30,14 +47,14 @@ const fakeDataGenerator = (function() {
         }
 
         fakeDataGenerator.appendAyxTagToTarget({
-          targetEl: row,
+          targetEl: columnContainer,
           uiProps: textBoxUIProps
         })
 
         // add dropdown label
         const dropDownLabel = document.createElement('label')
         dropDownLabel.innerText = 'Generator Type'
-        row.appendChild(dropDownLabel)
+        columnContainer.appendChild(dropDownLabel)
 
         // add dropdown
         const providerUIProps = {
@@ -46,14 +63,33 @@ const fakeDataGenerator = (function() {
         }
 
         fakeDataGenerator.appendAyxTagToTarget({
-          targetEl: row,
+          targetEl: columnContainer,
           uiProps: providerUIProps
         })
 
-        document.getElementById('container').appendChild(row)
+        // add delete column button
+        const buttonId = 'deleteColumnButton_' + Math.random() + Date.now()
+        const deleteColumnButtonProps = {
+          type: 'Button',
+          widgetId: buttonId,
+          label: 'Delete Column',
+        }
+
+        const buttonTag = fakeDataGenerator.appendAyxTagToTarget({
+          targetEl: columnContainer,
+          uiProps: deleteColumnButtonProps,
+        })
+
+        buttonTag.onclick = fakeDataGenerator.deleteColumn.bind(this, fieldId)
+
+        container.appendChild(header)
+        container.appendChild(columnContainer)
+
+        document.getElementById('accordion').appendChild(container)
 
         // render the row so that the widget id is available
-        window.Alteryx.Gui.Manager.addWidget(row)
+        window.Alteryx.Gui.Manager.addWidget(columnContainer)
+        $( "#accordion" ).accordion( "refresh" )
 
         const alteryxDataItems = window.Alteryx.Gui.FakeDataGenerator.AlteryxDataItems
         const manager = window.Alteryx.Gui.Manager
@@ -216,4 +252,4 @@ const fakeDataGenerator = (function() {
         })
       },
     }
-}());
+}())
