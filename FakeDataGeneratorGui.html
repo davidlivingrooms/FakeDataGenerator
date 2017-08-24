@@ -135,15 +135,8 @@
             ui.newPanel[0].style.overflow = 'visible'
           }
         },  
-    }).sortable({
-        axis: "y",
-        handle: "h3",
-        stop: function( event, ui ) {
-          // Refresh accordion to handle new order
-          $( this ).accordion( "refresh" );
-        }
-      })
-  } )
+    })
+  })
 
 $('span.ui-icon-trash').click(function(e) {
 

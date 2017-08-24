@@ -115,6 +115,325 @@ const fakeDataGenerator = (function() {
         fieldContainer.addDataItem(stringSelector)
         manager.getDataItem('FakeFields').addDataItem(fieldContainer)
       },
+      getGeneratorCategoryOptionList: () => {
+        const optionList = [
+          {
+            value: 'address',
+            label: 'Address'
+          },
+          {
+            value: 'automotive',
+            label: 'Automotive'
+          },
+          {
+            value: 'barcode',
+            label: 'Barcode'
+          },
+          {
+            value: 'color',
+            label: 'Color'
+          },
+          {
+            value: 'company',
+            label: 'Company'
+          },
+          {
+            value: 'credCard',
+            label: 'Credit Card'
+          },
+          {
+            value: 'currency',
+            label: 'Currency'
+          },
+          {
+            value: 'dataTime',
+            label: 'Date Time'
+          },
+          {
+            value: 'file',
+            label: 'File'
+          },
+          {
+            value: 'internet',
+            label: 'Internet'
+          },
+          {
+            value: 'isbn',
+            label: 'ISBN'
+          },
+          {
+            value: 'job',
+            label: 'Job'
+          },
+          {
+            value: 'lorem',
+            label: 'Lorem Ipsum'
+          },
+          {
+            value: 'misc',
+            label: 'Misc'
+          },
+          {
+            value: 'person',
+            label: 'Person'
+          },
+          {
+            value: 'phoneNumber',
+            label: 'Phone Number'
+          },
+          {
+            value: 'profile',
+            label: 'Profile'
+          },
+          {
+            value: 'ssn',
+            label: 'SSN'
+          },
+          {
+            value: 'userAgent',
+            label: 'User Agent'
+          },
+        ]
+
+        return optionList
+      },
+      getMiscellaniousOptionList: () => {
+        const optionList = [
+          {
+            value: 'licensePlate',
+            label: 'License Plate'
+          },
+        ]
+
+        return optionList
+      },
+      getAddressOptionList: () => {
+        const optionList = [
+          {
+            value: 'country',
+            label: 'Country'
+          },
+          {
+            value: 'cityPrefix',
+            label: 'City Prefix'
+          },
+          {
+            value: 'secondaryAddress',
+            label: 'Secondary Address'
+          },
+          {
+            value: 'randomDigit',
+            label: 'Random Digit'
+          },
+          {
+            value: 'randomLetter',
+            label: 'Random Letter'
+          },
+          {
+            value: 'citySuffix',
+            label: 'City Suffix'
+          },
+          {
+            value: 'streetName',
+            label: 'Street Name'
+          },
+          {
+            value: 'longitude',
+            label: 'Longitude'
+          },
+          {
+            value: 'militaryDPO',
+            label: 'Military Diplomatic Post Office'
+          },
+          {
+            value: 'zipCode',
+            label: 'Zip Code'
+          },
+          {
+            value: 'buildingNumber',
+            label: 'Building Number'
+          },
+          {
+            value: 'militaryShip',
+            label: 'Military Ship'
+          },
+          {
+            value: 'streetSuffix',
+            label: 'Street Suffix'
+          },
+          {
+            value: 'streetAddress',
+            label: 'Street Address'
+          },
+          {
+            value: 'latitude',
+            label: 'Latitude'
+          },
+          {
+            value: 'zipCodePlus4',
+            label: 'Zip+4'
+          },
+          {
+            value: 'state',
+            label: 'State'
+          },
+          {
+            value: 'city',
+            label: 'City'
+          },
+          {
+            value: 'militaryAPO',
+            label: 'Military Army Post Office'
+          },
+          {
+            value: 'stateAbbr',
+            label: 'State Abbreviation'
+          },
+          {
+            value: 'postalCodePlus4',
+            label: 'Postal+4'
+          },
+          {
+            value: 'postalCode',
+            label: 'Postal Code'
+          },
+          {
+            value: 'countryCode',
+            label: 'Country Code'
+          },
+          {
+            value: 'address',
+            label: 'Address'
+          },
+          {
+            value: 'postCode',
+            label: 'Post Code'
+          },
+          {
+            value: 'militaryState',
+            label: 'Military State'
+          }
+        ]
+
+        return optionList
+      },
+      getBarcodeOptionList: () => {
+        const optionList = [
+          {
+            value: 'ean8',
+            label: 'EAN-8'
+          },
+          {
+            value: 'ean13',
+            label: 'EAN-13'
+          }
+        ]
+
+        return optionList
+      },
+      getColorOptionList: () => {
+        const optionList = [
+          {
+            value: 'rgbCssColor',
+            label: 'RGB CSS Color'
+          },
+          {
+            value: 'hexColor',
+            label: 'Hex Color'
+          },
+          {
+            value: 'colorName',
+            label: 'Color Name'
+          },
+          {
+            value: 'safeColorName',
+            label: 'Safe Color Name'
+          },
+          {
+            value: 'safeHexColor',
+            label: 'Sage Hex Color'
+          },
+          {
+            value: 'rgbColor',
+            label: 'RGB Color'
+          }
+        ]
+
+        return optionList
+      },
+      getCompanyOptionList: () => {
+        const optionList = [
+          {
+            value: 'company',
+            label: 'Company'
+          },
+          {
+            value: 'catchPhrase',
+            label: 'Catch Phrase'
+          },
+          {
+            value: 'companySuffix',
+            label: 'Company Suffix'
+          },
+          {
+            value: 'bs',
+            label: 'Buzz Words'
+          },
+        ]
+
+        return optionList
+      },
+      getCreditCardOptionList: () => {
+        const optionList = [
+          {
+            value: 'securityCode',
+            label: 'Security Code'
+          },
+          {
+            value: 'number',
+            label: 'Number'
+          },
+          {
+            value: 'provider',
+            label: 'Provider'
+          },          {
+            value: 'expirationDate',
+            label: 'Expiration Date'
+          },          {
+            value: 'full',
+            label: 'Full Info'
+          },
+        ]
+
+        return optionList
+      },
+      getCurrencyOptionList: () => {
+        const optionList = [
+          {
+            value: 'cryptoCode',
+            label: 'Cryptocurrency Code'
+          },
+          {
+            value: 'currencyCode',
+            label: 'Currency Code'
+          }
+        ]
+
+        return optionList
+      },
+      getGeneratorOptionListByCategory: (category) => {
+        let optionList = []
+        switch(category) {
+          case 'address':
+            return fakeDataGenerator.getAddressOptionList()
+            break
+          default:
+            console.error('Unrecognized category type.')
+            break
+        }
+
+        return optionList
+      },
       getGeneratorTypeOptionList: () => {
         const optionList = [
           {
