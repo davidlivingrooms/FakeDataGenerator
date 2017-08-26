@@ -1,11 +1,18 @@
 const fakeDataGenerator = (function() {
     return {
-      appendAyxTagToTarget: ({targetEl, uiProps}) => {
+      appendAyxTagToTarget: ({targetEl, uiProps, id}) => {
           const ayxTag = document.createElement('ayx')
           ayxTag.setAttribute('data-ui-props', `${JSON.stringify(uiProps)}`)
+          if (id) {
+            ayxTag.id = id
+          }
           targetEl.appendChild(ayxTag)
           return ayxTag
         },
+      updateColumnHeader: (columnName, columnTextBoxId) => {
+        const columnNameTextBox = $(document.getElementById(columnTextBoxId))
+        columnNameTextBox.parent().parent().find('.headerText').text(columnName ? columnName : 'Column')
+      },
       addNewColumn: () => {
         const fieldId = 'Field_' + Math.random() + Date.now()
         fakeDataGenerator.addColumn({fieldId})
@@ -29,7 +36,11 @@ const fakeDataGenerator = (function() {
         const categoryId = 'categoryDropDown' + Math.random() + Date.now()
 
         const header = document.createElement('h3')
-        header.innerText = 'Column'
+
+        const headerTextSpan = document.createElement('span') 
+        headerTextSpan.className = 'headerText'
+        headerTextSpan.innerText = fieldNameValue ? fieldNameValue : 'Column'
+        header.appendChild(headerTextSpan)
 
         // add container
         const container = document.createElement('div')
@@ -52,7 +63,8 @@ const fakeDataGenerator = (function() {
 
         fakeDataGenerator.appendAyxTagToTarget({
           targetEl: columnContainer,
-          uiProps: textBoxUIProps
+          uiProps: textBoxUIProps,
+          id: fieldNameId,
         })
 
         // add category dropdown label
@@ -118,6 +130,11 @@ const fakeDataGenerator = (function() {
         const fieldContainer = new alteryxDataItems.DataItemContainer(fieldId)
 
         const simpleString = new alteryxDataItems.SimpleString('FieldName')
+
+        simpleString.registerPropertyListener('value', function (event) {
+          fakeDataGenerator.updateColumnHeader(event.value, fieldNameId)
+        })
+
         if (fieldNameValue) {
           simpleString.setValue(fieldNameValue)
         }

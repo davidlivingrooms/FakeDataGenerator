@@ -34,10 +34,10 @@
       <legend class='blueTitle'>Column Builder</legend>
       <div id="accordion">
         <div class="group">
-          <h3>Column</h3>
+          <h3><span class="headerText">Column</span></h3>
           <div >
             <label>Column Name</label>
-            <ayx data-ui-props="{type: 'TextBox', widgetId: 'fieldNameTextBox', 'placeholder': 'Enter new column name here'}"></ayx>
+            <ayx id="fieldNameTextBox" data-ui-props="{type: 'TextBox', widgetId: 'fieldNameTextBox', 'placeholder': 'Enter new column name here'}"></ayx>
             <label>Category</label>
             <ayx data-ui-props="{type: 'DropDown', widgetId: 'categoryDropDown'}"></ayx>
             <label>Fake Data Type</label>
@@ -80,6 +80,11 @@
       // each field will be in its own data item container
       const fieldContainer = new AlteryxDataItems.DataItemContainer(fieldContainerName)
       const simpleString = new AlteryxDataItems.SimpleString('FieldName')
+
+      simpleString.registerPropertyListener('value', function (event) {
+        fakeDataGenerator.updateColumnHeader(event.value, 'fieldNameTextBox')
+      })
+
       const categoryStringSelector= new AlteryxDataItems.StringSelector('Category')
       const providerStringSelector = new AlteryxDataItems.StringSelector('Provider')
       categoryStringSelector.setOptionList(optionUtils.getGeneratorCategoryOptionList())
@@ -180,6 +185,10 @@
     .ui-accordion-header {
       background-color: #1691c6;
       color: white;
+    }
+
+    .headerText {
+      float: none;
     }
   </style>
 </body>
