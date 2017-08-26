@@ -3,47 +3,50 @@ const optionUtils = (function() {
       getGeneratorOptionListByCategory: (category) => {
         let optionList = []
         switch(category) {
+          case 'all':
+            return optionUtils.getAllOptions()
+            break
           case 'address':
-            return fakeDataGenerator.getAddressOptionList()
+            return optionUtils.getAddressOptionList()
             break
           case 'barcode':
-            return fakeDataGenerator.getBarcodeOptionList()
+            return optionUtils.getBarcodeOptionList()
             break
           case 'color':
-            return fakeDataGenerator.getColorOptionList()
+            return optionUtils.getColorOptionList()
             break
           case 'company':
-            return fakeDataGenerator.getCompanyOptionList()
+            return optionUtils.getCompanyOptionList()
             break
           case 'creditCard':
-            return fakeDataGenerator.getCreditCardOptionList()
+            return optionUtils.getCreditCardOptionList()
             break
           case 'currency':
-            return fakeDataGenerator.getCurrencyOptionList()
+            return optionUtils.getCurrencyOptionList()
             break
           case 'dateTime':
-            return fakeDataGenerator.getDateTimeOptionList()
+            return optionUtils.getDateTimeOptionList()
             break
           case 'file':
-            return fakeDataGenerator.getFileOptionList()
+            return optionUtils.getFileOptionList()
             break
           case 'internet':
-            return fakeDataGenerator.getInternetOptionList()
+            return optionUtils.getInternetOptionList()
             break
           case 'isbn':
-            return fakeDataGenerator.getISBNOptionList()
+            return optionUtils.getISBNOptionList()
             break
           case 'lorem':
-            return fakeDataGenerator.getLoremOptionList()
+            return optionUtils.getLoremOptionList()
             break
           case 'misc':
-            return fakeDataGenerator.getMiscellaniousOptionList()
+            return optionUtils.getMiscellaniousOptionList()
             break
           case 'person':
-            return fakeDataGenerator.getPersonOptionList()
+            return optionUtils.getPersonOptionList()
             break
           case 'userAgent':
-            return fakeDataGenerator.getUserAgentOptionList()
+            return optionUtils.getUserAgentOptionList()
             break
           default:
             console.error('Unrecognized category type.')
@@ -51,6 +54,9 @@ const optionUtils = (function() {
         }
 
         return optionList
+      },
+      getAllOptions: () => {
+        return optionUtils.getAddressOptionList()
       },
       getGeneratorCategoryOptionList: () => {
         const optionList = [
