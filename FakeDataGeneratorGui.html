@@ -83,11 +83,13 @@
       const categoryStringSelector= new AlteryxDataItems.StringSelector('Category')
       const providerStringSelector = new AlteryxDataItems.StringSelector('Provider')
       categoryStringSelector.setOptionList(optionUtils.getGeneratorCategoryOptionList())
+      categoryStringSelector.setValue('all')
       providerStringSelector.setOptionList(optionUtils.getGeneratorOptionListByCategory('all'))
       manager.bindDataItemToWidget(simpleString, 'fieldNameTextBox')
       manager.bindDataItemToWidget(categoryStringSelector, 'categoryDropDown')
       manager.bindDataItemToWidget(providerStringSelector, 'providerComboBox')
       fieldContainer.addDataItem(simpleString)
+      fieldContainer.addDataItem(categoryStringSelector)
       fieldContainer.addDataItem(providerStringSelector)
 
       fakeFieldContainer.addDataItem(fieldContainer)

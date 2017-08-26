@@ -107,31 +107,43 @@ class AyxPlugin:
             generated_value = self.fake.address()
         elif provider == 'country':
             generated_value = self.fake.country()
+        elif provider == 'boolean':
+            generated_value = self.fake.boolean()
+        elif provider == 'locale':
+            generated_value = self.fake.boolean()
+        elif provider == 'uuid4':
+            generated_value = self.fake.uuid4()
+        elif provider == 'sha1':
+            generated_value = self.fake.sha1()
+        elif provider == 'languageCode':
+            generated_value = self.fake.language_code()
+        elif provider == 'nullBoolean':
+            generated_value = self.fake.null_boolean()
         elif provider == 'name':
             generated_value = self.fake.name()
-        elif provider == 'phone_number':
+        elif provider == 'phoneNumber':
             generated_value = self.fake.phone_number()
-        elif provider == 'mac_address':
+        elif provider == 'macAddress':
             generated_value = self.fake.mac_address()
-        elif provider == 'user_name':
+        elif provider == 'userName':
             generated_value = self.fake.user_name()
         elif provider == 'url':
             generated_value = self.fake.url()
-        elif provider == 'image_url':
+        elif provider == 'imageUrl':
             generated_value = self.fake.image_url()
         elif provider == 'company':
             generated_value = self.fake.company()
         elif provider == 'bs':
             generated_value = self.fake.bs()
-        elif provider == 'day_of_week':
+        elif provider == 'dayOfWeek':
             generated_value = self.fake.day_of_week()
-        elif provider == 'free_email':
+        elif provider == 'freeEmail':
             generated_value = self.fake.free_email()
         elif provider == 'job':
             generated_value = self.fake.job()
         elif provider == 'ean8':
             generated_value = self.fake.ean8()
-        elif provider == 'credit_card_full':
+        elif provider == 'creditCardFull':
             generated_value = self.fake.credit_card_full()
         elif provider == 'paragraph':
             generated_value = self.fake.paragraph()
@@ -139,7 +151,7 @@ class AyxPlugin:
             generated_value = self.fake.text()
         elif provider == 'binary':
             generated_value = self.fake.binary()
-        elif provider == 'file_path':
+        elif provider == 'filePath':
             generated_value = self.fake.file_path()
         elif provider == 'sha256':
             generated_value = self.fake.sha256()
@@ -147,28 +159,214 @@ class AyxPlugin:
             generated_value = self.fake.md5()
         elif provider == 'password':
             generated_value = self.fake.password()
-        elif provider == 'license_plate':
+        elif provider == 'licensePlate':
             generated_value = self.fake.license_plate()
+        elif provider == 'isbn10':
+            generated_value = self.fake.isbn10()
         elif provider == 'isbn13':
             generated_value = self.fake.isbn13()
         elif provider == 'latitude':
             generated_value = self.fake.latitude()
         elif provider == 'longitude':
             generated_value = self.fake.longitude()
-        elif provider == 'simple_profile':
-            generated_value = self.fake.simple_profile()
         elif provider == 'ssn':
             generated_value = self.fake.ssn()
-        elif provider == 'user_agent':
+        elif provider == 'userAgent':
             generated_value = self.fake.user_agent()
-        elif provider == 'simple_profile':
-            generated_value = self.fake.simple_profile()
-        elif provider == 'profile':
-            generated_value = self.fake.profile()
         elif provider == 'ipv4':
             generated_value = self.fake.ipv4()
         elif provider == 'ipv6':
             generated_value = self.fake.ipv6()
+        elif provider == 'cityPrefix':
+            generated_value = self.fake.ipv6()
+        elif provider == 'secondaryAddress':
+            generated_value = self.fake.secondary_address()
+        elif provider == 'randomDigit':
+            generated_value = self.fake.random_digit()
+        elif provider == 'randomLetter':
+            generated_value = self.fake.random_letter()
+        elif provider == 'citySuffix':
+            generated_value = self.fake.city_suffix()
+        elif provider == 'streetName':
+            generated_value = self.fake.street_name()
+        elif provider == 'longitude':
+            generated_value = self.fake.longitude()
+        elif provider == 'militaryDPO':
+            generated_value = self.fake.military_dpo()
+        elif provider == 'zipCode':
+            generated_value = self.fake.zipcode()
+        elif provider == 'buildingNumber':
+            generated_value = self.fake.building_number()
+        elif provider == 'militaryShip':
+            generated_value = self.fake.military_ship()
+        elif provider == 'streetSuffix':
+            generated_value = self.fake.street_suffix()
+        elif provider == 'streetAddress':
+            generated_value = self.fake.street_address()
+        elif provider == 'zipCodePlus4':
+            generated_value = self.fake.zipcode_plus4()
+        elif provider == 'state':
+            generated_value = self.fake.state()
+        elif provider == 'city':
+            generated_value = self.fake.city()
+        elif provider == 'militaryAPO':
+            generated_value = self.fake.military_apo()
+        elif provider == 'stateAbbr':
+            generated_value = self.fake.state_abbr()
+        elif provider == 'postalCodePlus4':
+            generated_value = self.fake.postalcode_plus4()
+        elif provider == 'postalCode':
+            generated_value = self.fake.postalcode()
+        elif provider == 'countryCode':
+            generated_value = self.fake.country_code()
+        elif provider == 'postCode':
+            generated_value = self.fake.postcode()
+        elif provider == 'militaryState':
+            generated_value = self.fake.military_state()
+        elif provider == 'ean13':
+            generated_value = self.fake.ean13()
+        elif provider == 'rgbCssColor':
+            generated_value = self.fake.rgb_css_color()
+        elif provider == 'hexColor':
+            generated_value = self.fake.hex_color()
+        elif provider == 'colorName':
+            generated_value = self.fake.color_name()
+        elif provider == 'safeColorName':
+            generated_value = self.fake.safe_color_name()
+        elif provider == 'safeHexColor':
+            generated_value = self.fake.safe_hex_color()
+        elif provider == 'rgbColor':
+            generated_value = self.fake.rgb_color()
+        elif provider == 'catchPhrase':
+            generated_value = self.fake.catch_phrase()
+        elif provider == 'companySuffix':
+            generated_value = self.fake.company_suffix()
+        elif provider == 'bs':
+            generated_value = self.fake.bs()
+        elif provider == 'securityCode':
+            generated_value = self.fake.credit_card_security_code()
+        elif provider == 'number':
+            generated_value = self.fake.credit_card_number()
+        elif provider == 'provider':
+            generated_value = self.fake.credit_card_provider()
+        elif provider == 'expirationDate':
+            generated_value = self.fake.credit_card_expire()
+        elif provider == 'full':
+            generated_value = self.fake.credit_card_full()
+        elif provider == 'cryptoCode':
+            generated_value = self.fake.cryptocurrency_code()
+        elif provider == 'currencyCode':
+            generated_value = self.fake.currency_code()
+        elif provider == 'dateTimeThisYear':
+            generated_value = self.fake.date_time_this_year()
+        elif provider == 'pastDate':
+            generated_value = self.fake.past_date()
+        elif provider == 'timeZone':
+            generated_value = self.fake.timezone()
+        elif provider == 'timeDelta':
+            generated_value = self.fake.time_delta()
+        elif provider == 'futureDate':
+            generated_value = self.fake.future_date()
+        elif provider == 'dateTimeThisDecade':
+            generated_value = self.fake.date_time_this_decade()
+        elif provider == 'dateTime':
+            generated_value = self.fake.date_time()
+        elif provider == 'dayOfWeek':
+            generated_value = self.fake.day_of_week()
+        elif provider == 'pastDateTime':
+            generated_value = self.fake.past_datetime()
+        elif provider == 'iso8601':
+            generated_value = self.fake.iso8601()
+        elif provider == 'dayOfMonth':
+            generated_value = self.fake.day_of_month()
+        elif provider == 'futureDateTime':
+            generated_value = self.fake.future_datetime()
+        elif provider == 'time':
+            generated_value = self.fake.time()
+        elif provider == 'date':
+            generated_value = self.fake.date()
+        elif provider == 'century':
+            generated_value = self.fake.century()
+        elif provider == 'year':
+            generated_value = self.fake.year()
+        elif provider == 'dateTimeThisMonth':
+            generated_value = self.fake.date_time_this_month()
+        elif provider == 'month':
+            generated_value = self.fake.month()
+        elif provider == 'monthName':
+            generated_value = self.fake.month_name()
+        elif provider == 'unixTime':
+            generated_value = self.fake.unix_time()
+        elif provider == 'fileName':
+            generated_value = self.fake.file_name()
+        elif provider == 'fileExtension':
+            generated_value = self.fake.file_extension()
+        elif provider == 'mimeType':
+            generated_value = self.fake.mimeType()
+        elif provider == 'filePath':
+            generated_value = self.fake.file_path()
+        elif provider == 'uriExtension':
+            generated_value = self.fake.uri_extension()
+        elif provider == 'safeEmail':
+            generated_value = self.fake.safe_email()
+        elif provider == 'uri':
+            generated_value = self.fake.uri()
+        elif provider == 'domainName':
+            generated_value = self.fake.domain_name()
+        elif provider == 'companyEmail':
+            generated_value = self.fake.company_email()
+        elif provider == 'freeEmailDomain':
+            generated_value = self.fake.free_email_domain()
+        elif provider == 'email':
+            generated_value = self.fake.email()
+        elif provider == 'tld':
+            generated_value = self.fake.tld()
+        elif provider == 'uriPath':
+            generated_value = self.fake.uri_path()
+        elif provider == 'slug':
+            generated_value = self.fake.slug()
+        elif provider == 'uriPage':
+            generated_value = self.fake.uri_page()
+        elif provider == 'domainWork':
+            generated_value = self.fake.domain_word()
+        elif provider == 'word':
+            generated_value = self.fake.word()
+        elif provider == 'prefixFemale':
+            generated_value = self.fake.prefix_female()
+        elif provider == 'firstName':
+            generated_value = self.fake.first_name()
+        elif provider == 'firstNameMale':
+            generated_value = self.fake.first_name_male()
+        elif provider == 'nameMale':
+            generated_value = self.fake.name_male()
+        elif provider == 'suffix':
+            generated_value = self.fake.suffix()
+        elif provider == 'lastName':
+            generated_value = self.fake.last_name()
+        elif provider == 'firstNameFemale':
+            generated_value = self.fake.first_name_female()
+        elif provider == 'fullNameFemale':
+            generated_value = self.fake.full_name_female()
+        elif provider == 'prefix':
+            generated_value = self.fake.prefix()
+        elif provider == 'chrome':
+            generated_value = self.fake.chrome()
+        elif provider == 'firefox':
+            generated_value = self.fake.firefox()
+        elif provider == 'opera':
+            generated_value = self.fake.opera()
+        elif provider == 'safari':
+            generated_value = self.fake.safari()
+        elif provider == 'internetExplorer':
+            generated_value = self.fake.internet_explorer()
+        elif provider == 'windowsPlatformToken':
+            generated_value = self.fake.windows_platform_token()
+        elif provider == 'linuxPlatformToken':
+            generated_value = self.fake.linux_platform_token()
+        elif provider == 'userAgent':
+            generated_value = self.fake.user_agent()
+        elif provider == 'macPlatformToken':
+            generated_value = self.fake.mac_platform_token()
         else:
             return 'No Provider found'
 

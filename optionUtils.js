@@ -63,10 +63,6 @@ const optionUtils = (function() {
             label: 'Address'
           },
           {
-            value: 'automotive',
-            label: 'Automotive'
-          },
-          {
             value: 'barcode',
             label: 'Barcode'
           },
@@ -121,14 +117,6 @@ const optionUtils = (function() {
           {
             value: 'phoneNumber',
             label: 'Phone Number'
-          },
-          {
-            value: 'profile',
-            label: 'Profile'
-          },
-          {
-            value: 'ssn',
-            label: 'SSN'
           },
           {
             value: 'userAgent',
@@ -521,7 +509,7 @@ const optionUtils = (function() {
       getInternetOptionList: () => {
         const optionList = [
           {
-            value: 'imageURL',
+            value: 'imageUrl',
             label: 'Image URL'
           },
           {
