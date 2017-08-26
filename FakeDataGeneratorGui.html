@@ -71,7 +71,7 @@
 
       const configuration = json.Configuration
       let fieldContainerName = ''
-      if (configuration && Object.keys(configuration.FakeFields).length === 1) {
+      if (configuration && Object.keys(configuration.FakeFields).length > 1) {
         fieldContainerName = Object.keys(configuration.FakeFields)[0]
       } else {
         fieldContainerName = 'Field'
@@ -98,7 +98,6 @@
       fieldContainer.addDataItem(simpleString)
       fieldContainer.addDataItem(categoryStringSelector)
       fieldContainer.addDataItem(providerStringSelector)
-
       fakeFieldContainer.addDataItem(fieldContainer)
 
       // make sure button is properly bound to delete the first one
@@ -110,11 +109,11 @@
         if (Object.keys(configuration.FakeFields).length > 1) {
           const fakeFields = configuration.FakeFields
           Object.keys(fakeFields).forEach(function (key) {
-            if (key === 'Field') return // the first one is already in the html and has a data item
+            if (key === fieldContainerName) return // the first one is already in the html and has a data item
             const field = fakeFields[key]
             // add widgets
             fakeDataGenerator.addColumn({
-              category: field.Category,
+              categoryValue: field.Category,
               providerValue: field.Provider,
               fieldNameValue: field.FieldName,
               fieldId: key
@@ -126,34 +125,29 @@
 
   </script>
   <script>
-  $( function() {
-    $( "#accordion" ).accordion({
-        collapsible: true,
-        heightStyle: 'content',
-        clearStyle: true,        
-        autoHeight: true,
-        header: "> div > h3",        
-        create: function( event, ui ) {
-        if (ui.panel[0]) {
-            ui.panel[0].style.overflow = 'visible'
-          }
-        },        
-        beforeActivate: function( event, ui ) {
-          if (ui.oldPanel[0]) {
-            ui.oldPanel[0].style.overflow = 'auto'
-          }
+    $( function() {
+      $( "#accordion" ).accordion({
+          collapsible: true,
+          heightStyle: 'content',
+          clearStyle: true,        
+          autoHeight: true,
+          header: "> div > h3",        
+          create: function( event, ui ) {
+          if (ui.panel[0]) {
+              ui.panel[0].style.overflow = 'visible'
+            }
+          },        
+          beforeActivate: function( event, ui ) {
+            if (ui.oldPanel[0]) {
+              ui.oldPanel[0].style.overflow = 'auto'
+            }
 
-          if (ui.newPanel[0]) {
-            ui.newPanel[0].style.overflow = 'visible'
-          }
-        },  
+            if (ui.newPanel[0]) {
+              ui.newPanel[0].style.overflow = 'visible'
+            }
+          },  
+      })
     })
-  })
-
-$('span.ui-icon-trash').click(function(e) {
-
-})
-
   </script>
   <style>
     .accordion-add {

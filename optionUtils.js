@@ -49,7 +49,7 @@ const optionUtils = (function() {
             return optionUtils.getUserAgentOptionList()
             break
           default:
-            console.error('Unrecognized category type.')
+            console.error('Unrecognized category type: ' + category)
             break
         }
 
@@ -102,7 +102,7 @@ const optionUtils = (function() {
             label: 'Currency'
           },
           {
-            value: 'dataTime',
+            value: 'dateTime',
             label: 'Date Time'
           },
           {

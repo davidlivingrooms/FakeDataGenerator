@@ -126,17 +126,17 @@ const fakeDataGenerator = (function() {
         const stringSelector = new alteryxDataItems.StringSelector('Provider')
         stringSelector.setOptionList(optionUtils.getAllOptions())
 
-        if (providerValue) {
-          stringSelector.setValue(providerValue)
-        }
-
         categoryStringSelector.registerPropertyListener('value', (event) => {
           // clear and update the provider dropdown when the category changes
           stringSelector.setOptionList(optionUtils.getGeneratorOptionListByCategory(event.value))
           stringSelector.setValue('')
         })
-
         categoryStringSelector.setValue(categoryValue ? categoryValue : 'all')
+
+        if (providerValue) {
+          stringSelector.setValue(providerValue)
+        }
+
         manager.bindDataItemToWidget(simpleString, fieldNameId)
         manager.bindDataItemToWidget(stringSelector, providerId)
         manager.bindDataItemToWidget(categoryStringSelector, categoryId)
