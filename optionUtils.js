@@ -56,7 +56,20 @@ const optionUtils = (function() {
         return optionList
       },
       getAllOptions: () => {
-        return optionUtils.getAddressOptionList()
+        return optionUtils.getAddressOptionList().concat(
+          optionUtils.getBarcodeOptionList(),
+          optionUtils.getColorOptionList(),
+          optionUtils.getCompanyOptionList(),
+          optionUtils.getCreditCardOptionList(),
+          optionUtils.getCurrencyOptionList(),
+          optionUtils.getDateTimeOptionList(),
+          optionUtils.getFileOptionList(),
+          optionUtils.getInternetOptionList(),
+          optionUtils.getISBNOptionList(),
+          optionUtils.getLoremOptionList(),
+          optionUtils.getMiscellaniousOptionList(),
+          optionUtils.getPersonOptionList(),
+          optionUtils.getUserAgentOptionList()).sort(optionUtils.optionSorter)
       },
       getGeneratorCategoryOptionList: () => {
         const optionList = [
@@ -81,7 +94,7 @@ const optionUtils = (function() {
             label: 'Company'
           },
           {
-            value: 'credCard',
+            value: 'creditCard',
             label: 'Credit Card'
           },
           {
@@ -105,10 +118,6 @@ const optionUtils = (function() {
             label: 'ISBN'
           },
           {
-            value: 'job',
-            label: 'Job'
-          },
-          {
             value: 'lorem',
             label: 'Lorem Ipsum'
           },
@@ -119,10 +128,6 @@ const optionUtils = (function() {
           {
             value: 'person',
             label: 'Person'
-          },
-          {
-            value: 'phoneNumber',
-            label: 'Phone Number'
           },
           {
             value: 'userAgent',
@@ -370,21 +375,23 @@ const optionUtils = (function() {
         const optionList = [
           {
             value: 'securityCode',
-            label: 'Security Code'
+            label: 'Credit Card Security Code'
           },
           {
             value: 'number',
-            label: 'Number'
+            label: 'Credit Card Number'
           },
           {
             value: 'provider',
-            label: 'Provider'
-          },          {
+            label: 'Credit Card Provider'
+          },          
+          {
             value: 'expirationDate',
-            label: 'Expiration Date'
-          },          {
+            label: 'Credit Card Expiration Date'
+          },          
+          {
             value: 'full',
-            label: 'Full Info'
+            label: 'Credit Card Full Info'
           },
         ]
 
@@ -420,7 +427,7 @@ const optionUtils = (function() {
           },          
           {
             value: 'timeDelta',
-            label: 'DateTime This Year'
+            label: 'Time Delta'
           },
           {
             value: 'futureDate',

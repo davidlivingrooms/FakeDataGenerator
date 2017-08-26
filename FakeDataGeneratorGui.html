@@ -83,8 +83,15 @@
       const categoryStringSelector= new AlteryxDataItems.StringSelector('Category')
       const providerStringSelector = new AlteryxDataItems.StringSelector('Provider')
       categoryStringSelector.setOptionList(optionUtils.getGeneratorCategoryOptionList())
-      categoryStringSelector.setValue('all')
       providerStringSelector.setOptionList(optionUtils.getGeneratorOptionListByCategory('all'))
+
+      categoryStringSelector.registerPropertyListener('value', (event) => {
+        // clear and update the provider dropdown when the category changes
+        providerStringSelector.setOptionList(optionUtils.getGeneratorOptionListByCategory(event.value))
+        providerStringSelector.setValue('')
+      })
+
+      categoryStringSelector.setValue('all')
       manager.bindDataItemToWidget(simpleString, 'fieldNameTextBox')
       manager.bindDataItemToWidget(categoryStringSelector, 'categoryDropDown')
       manager.bindDataItemToWidget(providerStringSelector, 'providerComboBox')
@@ -149,13 +156,6 @@ $('span.ui-icon-trash').click(function(e) {
 
   </script>
   <style>
-    /*This styling needs to be here. Is due to file loading. Otherwise, will not get proper styling on dropdowns*/
-
-    .Select, .Select div, .Select input, .Select span {
-      box-sizing: content-box;
-      -webkit-box-sizing: content-box;
-    }
-
     .accordion-add {
       background-image: url('./img/add.png');
       background-repeat: no-repeat;

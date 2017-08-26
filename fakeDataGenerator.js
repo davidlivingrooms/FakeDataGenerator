@@ -119,17 +119,30 @@ const fakeDataGenerator = (function() {
           simpleString.setValue(fieldNameValue)
         }
 
+        // set up category data item
+        const categoryStringSelector = new alteryxDataItems.StringSelector('Category')
+        categoryStringSelector.setOptionList(optionUtils.getGeneratorCategoryOptionList())
+        // set up provider data item
         const stringSelector = new alteryxDataItems.StringSelector('Provider')
-        stringSelector.setOptionList(fakeDataGenerator.getGeneratorTypeOptionList())
+        stringSelector.setOptionList(optionUtils.getAllOptions())
 
         if (providerValue) {
           stringSelector.setValue(providerValue)
         }
 
+        categoryStringSelector.registerPropertyListener('value', (event) => {
+          // clear and update the provider dropdown when the category changes
+          stringSelector.setOptionList(optionUtils.getGeneratorOptionListByCategory(event.value))
+          stringSelector.setValue('')
+        })
+
+        categoryStringSelector.setValue(categoryValue ? categoryValue : 'all')
         manager.bindDataItemToWidget(simpleString, fieldNameId)
         manager.bindDataItemToWidget(stringSelector, providerId)
+        manager.bindDataItemToWidget(categoryStringSelector, categoryId)
         fieldContainer.addDataItem(simpleString)
         fieldContainer.addDataItem(stringSelector)
+        fieldContainer.addDataItem(categoryStringSelector)
         manager.getDataItem('FakeFields').addDataItem(fieldContainer)
       },
     }
