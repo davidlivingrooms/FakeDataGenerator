@@ -38,16 +38,18 @@
           <div >
             <label>Column Name</label>
             <ayx data-ui-props="{type: 'TextBox', widgetId: 'fieldNameTextBox', 'placeholder': 'Enter new column name here'}"></ayx>
-            <label>XMSG("Generator Type")</label>
-            <ayx data-ui-props="{type: 'DropDown', widgetId: 'providerDropDown'}"></ayx>
+            <label>Category</label>
+            <ayx data-ui-props="{type: 'DropDown', widgetId: 'categoryDropDown'}"></ayx>
+            <label>Fake Data Type</label>
+            <ayx data-ui-props="{type: 'ComboBox', widgetId: 'providerComboBox'}"></ayx>
             <ayx data-ui-props="{type: 'Button', widgetId: 'deleteColumnButton', label: 'Delete Column'}"></ayx>
-
           </div>
         </div>
       </div>    
       <div class='accordion-add' onclick='fakeDataGenerator.addNewColumn()'></div>
     </fieldset>
 
+  <script src="./optionUtils.js"></script>
   <script src="./fakeDataGenerator.js"></script>
   <script type="text/javascript">
     Alteryx.Gui.BeforeLoad = function (manager, AlteryxDataItems, json) {
@@ -78,12 +80,15 @@
       // each field will be in its own data item container
       const fieldContainer = new AlteryxDataItems.DataItemContainer(fieldContainerName)
       const simpleString = new AlteryxDataItems.SimpleString('FieldName')
-      const stringSelector = new AlteryxDataItems.StringSelector('Provider')
-      stringSelector.setOptionList(fakeDataGenerator.getGeneratorTypeOptionList())
+      const categoryStringSelector= new AlteryxDataItems.StringSelector('Category')
+      const providerStringSelector = new AlteryxDataItems.StringSelector('Provider')
+      categoryStringSelector.setOptionList(optionUtils.getGeneratorCategoryOptionList())
+      providerStringSelector.setOptionList(optionUtils.getGeneratorOptionListByCategory('all'))
       manager.bindDataItemToWidget(simpleString, 'fieldNameTextBox')
-      manager.bindDataItemToWidget(stringSelector, 'providerDropDown')
+      manager.bindDataItemToWidget(categoryStringSelector, 'categoryDropDown')
+      manager.bindDataItemToWidget(providerStringSelector, 'providerComboBox')
       fieldContainer.addDataItem(simpleString)
-      fieldContainer.addDataItem(stringSelector)
+      fieldContainer.addDataItem(providerStringSelector)
 
       fakeFieldContainer.addDataItem(fieldContainer)
 
@@ -98,11 +103,9 @@
           Object.keys(fakeFields).forEach(function (key) {
             if (key === 'Field') return // the first one is already in the html and has a data item
             const field = fakeFields[key]
-            console.log(field.FieldName)
-            console.log(field.Provider)
-
             // add widgets
             fakeDataGenerator.addColumn({
+              category: field.Category,
               providerValue: field.Provider,
               fieldNameValue: field.FieldName,
               fieldId: key
