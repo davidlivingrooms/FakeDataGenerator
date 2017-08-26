@@ -74,7 +74,8 @@ const fakeDataGenerator = (function() {
 
         // add combobox 
         const providerUIProps = {
-          type: 'ComboBox',
+          type: 'DropDown',
+          searchable: true,
           widgetId: providerId,
         }
 
