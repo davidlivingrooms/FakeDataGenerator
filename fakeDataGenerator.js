@@ -101,8 +101,6 @@ const fakeDataGenerator = (function() {
           uiProps: deleteColumnButtonProps,
         })
 
-        buttonTag.onclick = fakeDataGenerator.deleteColumn.bind(this, fieldId)
-
         container.appendChild(header)
         container.appendChild(columnContainer)
 
@@ -110,6 +108,7 @@ const fakeDataGenerator = (function() {
 
         // render the row so that the widget id is available
         window.Alteryx.Gui.Manager.addWidget(columnContainer)
+        window.Alteryx.Gui.Manager.setProp(buttonId, 'onClick', fakeDataGenerator.deleteColumn.bind(this, fieldId))
         $( "#accordion" ).accordion( "refresh" )
 
         const alteryxDataItems = window.Alteryx.Gui.FakeDataGenerator.AlteryxDataItems
