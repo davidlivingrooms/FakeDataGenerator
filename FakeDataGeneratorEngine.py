@@ -110,7 +110,7 @@ class AyxPlugin:
         elif provider == 'boolean':
             generated_value = self.fake.boolean()
         elif provider == 'locale':
-            generated_value = self.fake.boolean()
+            generated_value = self.fake.locale()
         elif provider == 'uuid4':
             generated_value = self.fake.uuid4()
         elif provider == 'sha1':
@@ -207,6 +207,8 @@ class AyxPlugin:
             generated_value = self.fake.zipcode_plus4()
         elif provider == 'state':
             generated_value = self.fake.state()
+        elif provider == 'sentence':
+            generated_value = self.fake.sentence()
         elif provider == 'city':
             generated_value = self.fake.city()
         elif provider == 'militaryAPO':
@@ -327,7 +329,7 @@ class AyxPlugin:
             generated_value = self.fake.slug()
         elif provider == 'uriPage':
             generated_value = self.fake.uri_page()
-        elif provider == 'domainWork':
+        elif provider == 'domainWord':
             generated_value = self.fake.domain_word()
         elif provider == 'word':
             generated_value = self.fake.word()
@@ -346,7 +348,7 @@ class AyxPlugin:
         elif provider == 'firstNameFemale':
             generated_value = self.fake.first_name_female()
         elif provider == 'fullNameFemale':
-            generated_value = self.fake.full_name_female()
+            generated_value = self.fake.name_female()
         elif provider == 'prefix':
             generated_value = self.fake.prefix()
         elif provider == 'chrome':

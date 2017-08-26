@@ -160,10 +160,6 @@ const optionUtils = (function() {
             label: 'UUID4'
           },
           {
-            value: 'binary',
-            label: 'Binary'
-          },
-          {
             value: 'password',
             label: 'Password'
           },
@@ -707,7 +703,7 @@ const optionUtils = (function() {
           },         
           {
             value: 'linuxPlatformToken',
-            label: 'Windows Platform Token'
+            label: 'Linux Platform Token'
           },         
           {
             value: 'userAgent',
