@@ -302,7 +302,7 @@ class AyxPlugin:
         elif provider == 'fileExtension':
             generated_value = self.fake.file_extension()
         elif provider == 'mimeType':
-            generated_value = self.fake.mimeType()
+            generated_value = self.fake.mime_type()
         elif provider == 'filePath':
             generated_value = self.fake.file_path()
         elif provider == 'uriExtension':

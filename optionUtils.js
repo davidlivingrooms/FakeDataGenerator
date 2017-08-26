@@ -339,7 +339,7 @@ const optionUtils = (function() {
           },
           {
             value: 'safeHexColor',
-            label: 'Sage Hex Color'
+            label: 'Safe Hex Color'
           },
           {
             value: 'rgbColor',
