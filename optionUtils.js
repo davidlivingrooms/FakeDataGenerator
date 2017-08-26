@@ -414,7 +414,7 @@ const optionUtils = (function() {
           },          
           {
             value: 'timeDelta',
-            label: 'DateTime This Year'
+            label: 'Time Delta'
           },
           {
             value: 'futureDate',
