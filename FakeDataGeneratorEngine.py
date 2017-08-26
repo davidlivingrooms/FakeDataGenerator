@@ -178,7 +178,7 @@ class AyxPlugin:
         elif provider == 'ipv6':
             generated_value = self.fake.ipv6()
         elif provider == 'cityPrefix':
-            generated_value = self.fake.ipv6()
+            generated_value = self.fake.city_prefix()
         elif provider == 'secondaryAddress':
             generated_value = self.fake.secondary_address()
         elif provider == 'randomDigit':
