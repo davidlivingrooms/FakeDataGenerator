@@ -71,7 +71,7 @@
 
       const configuration = json.Configuration
       let fieldContainerName = ''
-      if (configuration && Object.keys(configuration.FakeFields).length > 1) {
+      if (configuration && Object.keys(configuration.FakeFields).length) {
         fieldContainerName = Object.keys(configuration.FakeFields)[0]
       } else {
         fieldContainerName = 'Field'
@@ -159,6 +159,7 @@
       background-size: 14px;
       background-position: 3px;
       margin-left: calc(100% - 20px);
+      margin-top: 5px;
       cursor: pointer;
       clear: both;
     }
@@ -180,7 +181,6 @@
       background-color: #1691c6;
       color: white;
     }
-
   </style>
 </body>
 </html>

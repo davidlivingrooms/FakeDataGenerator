@@ -13,8 +13,11 @@ const fakeDataGenerator = (function() {
       deleteColumn: (fieldContainerDataName, event) => {
         const fakeFieldsContainer = window.Alteryx.Gui.Manager.getDataItem('FakeFields')
         if (fakeFieldsContainer.getDataItems().length > 1) {
-          const parent = $(event.target).parent().parent()
-          parent.parent().add(parent).fadeOut('slow',function(){$(this).remove();});
+          const parentElement = $(event.target).parents('.group')[0]
+          // parent.parent().add(parent).fadeOut('slow',function(){$(this).remove();});
+          $(parentElement).fadeOut('slow', function () {
+            $(this).remove()
+          })
 
           // remove data item
           fakeFieldsContainer.removeDataItem(fieldContainerDataName)
@@ -28,8 +31,9 @@ const fakeDataGenerator = (function() {
         const header = document.createElement('h3')
         header.innerText = 'Column'
 
-        // add column container
+        // add container
         const container = document.createElement('div')
+        container.className = 'group'
 
         // add column container
         const columnContainer= document.createElement('div')
