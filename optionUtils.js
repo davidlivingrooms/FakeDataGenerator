@@ -9,44 +9,35 @@ const optionUtils = (function() {
           case 'address':
             return optionUtils.getAddressOptionList()
             break
-          case 'barcode':
-            return optionUtils.getBarcodeOptionList()
-            break
-          case 'color':
-            return optionUtils.getColorOptionList()
+          case 'image':
+            return optionUtils.getImageOptionList()
             break
           case 'company':
             return optionUtils.getCompanyOptionList()
             break
-          case 'creditCard':
-            return optionUtils.getCreditCardOptionList()
+          case 'finance':
+            return optionUtils.getFinanceOptionList()
             break
-          case 'currency':
-            return optionUtils.getCurrencyOptionList()
+          case 'commerce':
+            return optionUtils.getCommerceOptionList()
             break
           case 'dateTime':
             return optionUtils.getDateTimeOptionList()
             break
-          case 'file':
-            return optionUtils.getFileOptionList()
+          case 'system':
+            return optionUtils.getSystemOptionList()
             break
           case 'internet':
             return optionUtils.getInternetOptionList()
             break
-          case 'isbn':
-            return optionUtils.getISBNOptionList()
-            break
           case 'lorem':
             return optionUtils.getLoremOptionList()
-            break
-          case 'misc':
-            return optionUtils.getMiscellaniousOptionList()
             break
           case 'person':
             return optionUtils.getPersonOptionList()
             break
-          case 'userAgent':
-            return optionUtils.getUserAgentOptionList()
+          case 'database':
+            return optionUtils.getDatabaseOptionList()
             break
           default:
             console.error('Unrecognized category type: ' + category)
@@ -57,19 +48,16 @@ const optionUtils = (function() {
       },
       getAllOptions: () => {
         return optionUtils.getAddressOptionList().concat(
-          optionUtils.getBarcodeOptionList(),
-          optionUtils.getColorOptionList(),
+          optionUtils.getImageOptionList(),
+          optionUtils.getCommerceOptionList(),
           optionUtils.getCompanyOptionList(),
-          optionUtils.getCreditCardOptionList(),
-          optionUtils.getCurrencyOptionList(),
+          optionUtils.getFinanceOptionList(),
           optionUtils.getDateTimeOptionList(),
-          optionUtils.getFileOptionList(),
+          optionUtils.getSystemOptionList(),
           optionUtils.getInternetOptionList(),
-          optionUtils.getISBNOptionList(),
           optionUtils.getLoremOptionList(),
-          optionUtils.getMiscellaniousOptionList(),
-          optionUtils.getPersonOptionList(),
-          optionUtils.getUserAgentOptionList()).sort(optionUtils.optionSorter)
+          optionUtils.getDatabaseOptionList(),
+          optionUtils.getPersonOptionList()).sort(optionUtils.optionSorter)
       },
       getGeneratorCategoryOptionList: () => {
         const optionList = [
@@ -82,111 +70,45 @@ const optionUtils = (function() {
             label: 'Address'
           },
           {
-            value: 'barcode',
-            label: 'Barcode'
-          },
-          {
-            value: 'color',
-            label: 'Color'
-          },
-          {
             value: 'company',
             label: 'Company'
           },
           {
-            value: 'creditCard',
-            label: 'Credit Card'
+            value: 'commerce',
+            label: 'Commerce'
           },
           {
-            value: 'currency',
-            label: 'Currency'
+            value: 'database',
+            label: 'Database'
           },
           {
             value: 'dateTime',
             label: 'Date Time'
           },
           {
-            value: 'file',
-            label: 'File'
+            value: 'finance',
+            label: 'Finance'
           },
           {
             value: 'internet',
             label: 'Internet'
           },
           {
-            value: 'isbn',
-            label: 'ISBN'
-          },
-          {
             value: 'lorem',
             label: 'Lorem Ipsum'
-          },
-          {
-            value: 'misc',
-            label: 'Misc'
           },
           {
             value: 'person',
             label: 'Person'
           },
           {
-            value: 'userAgent',
-            label: 'User Agent'
-          },
-        ]
-
-        return optionList
-      },
-      getMiscellaniousOptionList: () => {
-        const optionList = [
-          {
-            value: 'licensePlate',
-            label: 'License Plate'
+            value: 'image',
+            label: 'Image'
           },
           {
-            value: 'boolean',
-            label: 'Boolean'
-          },
-          {
-            value: 'locale',
-            label: 'Locale'
-          },
-          {
-            value: 'md5',
-            label: 'MD5'
-          },
-          {
-            value: 'uuid4',
-            label: 'UUID4'
-          },
-          {
-            value: 'password',
-            label: 'Password'
-          },
-          {
-            value: 'sha1',
-            label: 'SHA1'
-          },
-          {
-            value: 'sha256',
-            label: 'SHA256'
-          },
-          {
-            value: 'languageCode',
-            label: 'Language Code'
-          },
-          {
-            value: 'nullBoolean',
-            label: 'Null Boolean'
-          },
-          {
-            value: 'phoneNumber',
-            label: 'Phone Number'
-          },
-          {
-            value: 'ssn',
-            label: 'Social Security Number'
-          },
+            value: 'system',
+            label: 'System'
+          }
         ]
 
         return optionList
@@ -194,181 +116,139 @@ const optionUtils = (function() {
       getAddressOptionList: () => {
         const optionList = [
           {
-            value: 'country',
-            label: 'Country'
+            value: 'addressCountry',
+            label: '(Address) Country'
           },
           {
-            value: 'county',
-            label: 'County'
+            value: 'addressCounty',
+            label: '(Address) County'
           },
           {
-            value: 'department',
-            label: 'Department'
+            value: 'addressCityPrefix',
+            label: '(Address) City Prefix'
           },
           {
-            value: 'productName',
-            label: 'Product Name'
-          },          
-          {
-            value: 'price',
-            label: 'Price'
-          },          
-          {
-            value: 'productAdjective',
-            label: 'Product Adjective'
-          },          
-          {
-            value: 'productMaterial',
-            label: 'Product Material'
-          },          
-          {
-            value: 'product',
-            label: 'Product'
-          },          
-          {
-            value: 'cityPrefix',
-            label: 'City Prefix'
+            value: 'addressSecondaryAddress',
+            label: '(Address) Secondary Address'
           },
           {
-            value: 'secondaryAddress',
-            label: 'Secondary Address'
+            value: 'addressCitySuffix',
+            label: '(Address) City Suffix'
           },
           {
-            value: 'randomDigit',
-            label: 'Random Digit'
+            value: 'addressStreetName',
+            label: '(Address) Street Name'
           },
           {
-            value: 'randomLetter',
-            label: 'Random Letter'
+            value: 'addressLongitude',
+            label: '(Address) Longitude'
           },
           {
-            value: 'citySuffix',
-            label: 'City Suffix'
+            value: 'addressZipCode',
+            label: '(Address) Zip Code'
           },
           {
-            value: 'streetName',
-            label: 'Street Name'
+            value: 'addressStreetSuffix',
+            label: '(Address) Street Suffix'
           },
           {
-            value: 'longitude',
-            label: 'Longitude'
+            value: 'addressStreetPrefix',
+            label: '(Address) Street Prefix'
           },
           {
-            value: 'militaryDPO',
-            label: 'Military Diplomatic Post Office'
+            value: 'addressStreetAddress',
+            label: '(Address) Street Address'
           },
           {
-            value: 'zipCode',
-            label: 'Zip Code'
+            value: 'addressLatitude',
+            label: '(Address) Latitude'
           },
           {
-            value: 'buildingNumber',
-            label: 'Building Number'
+            value: 'addressState',
+            label: '(Address) State'
           },
           {
-            value: 'militaryShip',
-            label: 'Military Ship'
+            value: 'addressCity',
+            label: '(Address) City'
           },
           {
-            value: 'streetSuffix',
-            label: 'Street Suffix'
+            value: 'addressStateAbbr',
+            label: '(Address) State Abbreviation'
           },
           {
-            value: 'streetPrefix',
-            label: 'Street Prefix'
+            value: 'addressCountryCode',
+            label: '(Address) Country Code'
           },
-          {
-            value: 'streetAddress',
-            label: 'Street Address'
-          },
-          {
-            value: 'latitude',
-            label: 'Latitude'
-          },
-          {
-            value: 'state',
-            label: 'State'
-          },
-          {
-            value: 'city',
-            label: 'City'
-          },
-          {
-            value: 'militaryAPO',
-            label: 'Military Army Post Office'
-          },
-          {
-            value: 'stateAbbr',
-            label: 'State Abbreviation'
-          },
-          {
-            value: 'postalCodePlus4',
-            label: 'Postal+4'
-          },
-          {
-            value: 'postalCode',
-            label: 'Postal Code'
-          },
-          {
-            value: 'countryCode',
-            label: 'Country Code'
-          },
-          {
-            value: 'address',
-            label: 'Address'
-          },
-          {
-            value: 'postCode',
-            label: 'Post Code'
-          },
-          {
-            value: 'militaryState',
-            label: 'Military State'
-          }
         ]
 
         return optionList
       },
-      getBarcodeOptionList: () => {
+      getImageOptionList: () => {
         const optionList = [
           {
-            value: 'ean8',
-            label: 'EAN-8'
+            value: 'imageUrl',
+            label: '(Image) URL'
           },
           {
-            value: 'ean13',
-            label: 'EAN-13'
-          }
-        ]
-
-        return optionList
-      },
-      getColorOptionList: () => {
-        const optionList = [
-          {
-            value: 'rgbCssColor',
-            label: 'RGB CSS Color'
+            value: 'imageAvatar',
+            label: '(Image) Avatar'
           },
           {
-            value: 'hexColor',
-            label: 'Hex Color'
+            value: 'imageAbstract',
+            label: '(Image) Abstract'
           },
           {
-            value: 'colorName',
-            label: 'Color Name'
+            value: 'imageAnimals',
+            label: '(Image) Animals'
           },
           {
-            value: 'safeColorName',
-            label: 'Safe Color Name'
+            value: 'imageBusiness',
+            label: '(Image) Business'
           },
           {
-            value: 'safeHexColor',
-            label: 'Safe Hex Color'
+            value: 'imageCats',
+            label: '(Image) Cats'
           },
           {
-            value: 'rgbColor',
-            label: 'RGB Color'
-          }
+            value: 'imageCity',
+            label: '(Image) City'
+          },
+          {
+            value: 'imageFood',
+            label: '(Image) Food'
+          },
+          {
+            value: 'imageNightLife',
+            label: '(Image) Night Life'
+          },
+          {
+            value: 'imageFashion',
+            label: '(Image) Fashion'
+          },
+          {
+            value: 'imagePeople',
+            label: '(Image) People'
+          },
+          {
+            value: 'imageNature',
+            label: '(Image) Nature'
+          },
+          {
+            value: 'imageSports',
+            label: '(Image) Sports'
+          },
+          {
+            value: 'imageTechnics',
+            label: '(Image) Technics'
+          },
+          {
+            value: 'imageTransport',
+            label: '(Image) Transport'
+          },
+          {
+            value: 'imageDataUri',
+            label: '(Image) Data URI'
+          },
         ]
 
         return optionList
@@ -376,61 +256,127 @@ const optionUtils = (function() {
       getCompanyOptionList: () => {
         const optionList = [
           {
-            value: 'company',
-            label: 'Company'
+            value: 'companyName',
+            label: '(Company) Name'
           },
           {
-            value: 'catchPhrase',
-            label: 'Catch Phrase'
+            value: 'companyCatchPhrase',
+            label: '(Company) Catch Phrase'
+          },
+          {
+            value: 'companyDepartment',
+            label: '(Company) Department'
           },
           {
             value: 'companySuffix',
-            label: 'Company Suffix'
+            label: '(Company) Suffix'
           },
           {
-            value: 'bs',
-            label: 'Buzz Words'
-          },
-        ]
-
-        return optionList
-      },
-      getCreditCardOptionList: () => {
-        const optionList = [
-          {
-            value: 'securityCode',
-            label: 'Credit Card Security Code'
-          },
-          {
-            value: 'number',
-            label: 'Credit Card Number'
-          },
-          {
-            value: 'provider',
-            label: 'Credit Card Provider'
-          },          
-          {
-            value: 'expirationDate',
-            label: 'Credit Card Expiration Date'
-          },          
-          {
-            value: 'full',
-            label: 'Credit Card Full Info'
+            value: 'companyBS',
+            label: '(Company) Buzz Words'
           },
         ]
 
         return optionList
       },
-      getCurrencyOptionList: () => {
+      getDatabaseOptionList: () => {
         const optionList = [
           {
-            value: 'cryptoCode',
-            label: 'Cryptocurrency Code'
+            value: 'databaseColumn',
+            label: '(Database) Column'
           },
           {
-            value: 'currencyCode',
-            label: 'Currency Code'
-          }
+            value: 'databaseType',
+            label: '(Database) Column Type'
+          },
+          {
+            value: 'databaseCollation',
+            label: '(Database) Collation'
+          },
+          {
+            value: 'databaseEngine',
+            label: '(Database) Engine'
+          },
+        ]
+
+        return optionList
+      },
+      getCommerceOptionList: () => {
+        const optionList = [
+          {
+            value: 'commerceProductName',
+            label: '(Commerce) Product Name'
+          },
+          {
+            value: 'commercePrice',
+            label: '(Commerce) Price'
+          },
+          {
+            value: 'commerceProductAdjective',
+            label: '(Commerce) Product Adjective'
+          },          
+          {
+            value: 'commerceProductMaterial',
+            label: '(Commerce) Product Material'
+          },          
+          {
+            value: 'commerceProduct',
+            label: '(Commerce) Product'
+          },
+          {
+            value: 'commerceProductName',
+            label: '(Commerce) Product Name'
+          },
+        ]
+
+        return optionList
+      },
+      getFinanceOptionList: () => {
+        const optionList = [
+          {
+            value: 'financeAccountNumber',
+            label: '(Finance) Account Number'
+          },
+          {
+            value: 'financeAccountName',
+            label: '(Finance) Account Name'
+          },
+          {
+            value: 'financeMask',
+            label: '(Finance) Mask'
+          },
+          {
+            value: 'financeAccountAmount',
+            label: '(Finance) Account Amount'
+          },
+          {
+            value: 'financeTransactionType',
+            label: '(Finance) Transaction Type'
+          },
+          {
+            value: 'financeCurrencyCode',
+            label: '(Finance) Currency Code'
+          },
+          {
+            value: 'financeCurrencyName',
+            label: '(Finance) Currency Name'
+          },
+          {
+            value: 'financeCurrencySymbol',
+            label: '(Finance) Currency Symbol'
+          },
+          {
+            value: 'financeBitCoinAddress',
+            label: '(Finance) BitCoin Address'
+          },
+          {
+            value: 'financeIBAN',
+            label: '(Finance) IBAN'
+          },
+          {
+            value: 'financeBIC',
+            label: '(Finance) BIC'
+          },
         ]
 
         return optionList
@@ -438,106 +384,58 @@ const optionUtils = (function() {
       getDateTimeOptionList: () => {
         const optionList = [
           {
-            value: 'dateTimeThisYear',
-            label: 'DateTime This Year'
+            value: 'dateMonth',
+            label: '(DateTime) Month'
           },
           {
-            value: 'pastDate',
-            label: 'Past Date'
-          },          
-          {
-            value: 'timeZone',
-            label: 'Time Zone'
-          },          
-          {
-            value: 'timeDelta',
-            label: 'Time Delta'
+            value: 'dateDayOfWeek',
+            label: '(DateTime) Day Of Week'
           },
           {
-            value: 'futureDate',
-            label: 'Future Date'
+            value: 'datePastDateTime',
+            label: '(DateTime) Past DateTime'
           },
           {
-            value: 'dateTimeThisDecade',
-            label: 'DateTime This Decade'
-          },
-          {
-            value: 'dateTime',
-            label: 'DateTime'
-          },
-          {
-            value: 'dayOfWeek',
-            label: 'Day Of Week'
-          },
-          {
-            value: 'pastDateTime',
-            label: 'Past DateTime'
-          },
-          {
-            value: 'iso8601',
-            label: 'ISO 8601 DateTime'
-          },
-          {
-            value: 'dayOfMonth',
-            label: 'Day Of Month'
-          },
-          {
-            value: 'futureDateTime',
-            label: 'Future DateTime'
-          },
-          {
-            value: 'time',
-            label: 'Time'
-          },
-          {
-            value: 'date',
-            label: 'Date'
-          },
-          {
-            value: 'century',
-            label: 'Century'
-          },
-          {
-            value: 'year',
-            label: 'Year'
-          },
-          {
-            value: 'dateTimeThisMonth',
-            label: 'DateTime This Month'
-          },
-          {
-            value: 'month',
-            label: 'Month'
-          },
-          {
-            value: 'monthName',
-            label: 'Month Name'
-          },
-          {
-            value: 'unixTime',
-            label: 'Unix Time'
+            value: 'dateFutureDateTime',
+            label: '(DateTime) Future DateTime'
           },
         ]
 
         return optionList
       },
-      getFileOptionList: () => {
+      getSystemOptionList: () => {
         const optionList = [
           {
-            value: 'fileName',
-            label: 'File Name'
+            value: 'systemFileName',
+            label: '(System) File Name'
           },
           {
-            value: 'fileExtension',
-            label: 'File Extension'
-          },          
+            value: 'systemCommonFileName',
+            label: '(System) Common File Name'
+          },
           {
-            value: 'mimeType',
-            label: 'Mime Type'
-          },         
+            value: 'systemMimeType',
+            label: '(System) Mime Type'
+          },
           {
-            value: 'filePath',
-            label: 'File Path'
+            value: 'systemCommonFileType',
+            label: '(System) Common File Type'
+          },
+          {
+            value: 'systemCommonFileExt',
+            label: '(System) Common File Extension'
+          },
+          {
+            value: 'systemFileType',
+            label: '(System) File Type'
+          },
+          {
+            value: 'systemFileExt',
+            label: '(System) File Extension'
+          },
+          {
+            value: 'systemSemver',
+            label: '(System) SemVer'
           },
         ]
 
@@ -546,151 +444,53 @@ const optionUtils = (function() {
       getInternetOptionList: () => {
         const optionList = [
           {
-            value: 'imageUrl',
-            label: 'Image URL'
+            value: 'internetEmail',
+            label: '(Internet) Email'
           },
           {
-            value: 'macAddress',
-            label: 'Mac Address'
+            value: 'internetUserName',
+            label: '(Internet) UserName'
           },          
           {
-            value: 'uriExtension',
-            label: 'URI Extension'
+            value: 'internetProtocol',
+            label: '(Internet) Protocol'
+          },        
+          {
+            value: 'internetURL',
+            label: '(Internet) URL'
+          },        
+          {
+            value: 'internetDomainName',
+            label: '(Internet) Domain Name'
+          },        
+          {
+            value: 'internetDomainSuffix',
+            label: '(Internet) Domain Suffix'
+          },        
+          {
+            value: 'internetDomainWord',
+            label: '(Internet) Domain Word'
+          },        
+          {
+            value: 'internetIP',
+            label: '(Internet) IPv4'
+          },        
+          {
+            value: 'internetIPV6',
+            label: '(Internet) IPv6'
+          },        
+          {
+            value: 'internetUserAgent',
+            label: '(Internet) User Agent'
+          },        
+          {
+            value: 'internetMacAddress',
+            label: '(Internet) Mac Address'
           },         
           {
-            value: 'safeEmail',
-            label: 'Safe Email'
-          },
-          {
-            value: 'freeEmail',
-            label: 'Free Email'
+            value: 'internetPassword',
+            label: '(Internet) Password'
           },         
-          {
-            value: 'uri',
-            label: 'URI'
-          },         
-          {
-            value: 'databaseColumn',
-            label: 'Database Column'
-          },
-          {
-            value: 'databaseType',
-            label: 'Database Type'
-          },
-          {
-            value: 'databaseCollation',
-            label: 'Database Collation'
-          },          
-          {
-            value: 'databaseEngine',
-            label: 'Database Engine'
-          },
-          {
-            value: 'financeAccountNumber',
-            label: 'Finance Account Number'
-          },
-          {
-            value: 'financeAccountName',
-            label: 'Finance Account Name'
-          },
-          {
-            value: 'financeMask',
-            label: 'Finance Mask'
-          },
-          {
-            value: 'financeAccountAmount',
-            label: 'Finance Account Amount'
-          },
-          {
-            value: 'financeTransactionType',
-            label: 'Finance Transaction Type'
-          },
-          {
-            value: 'financeCurrencyCode',
-            label: 'Finance Currency Code'
-          },
-          {
-            value: 'financeCurrencyName',
-            label: 'Finance Currency Name'
-          },
-          {
-            value: 'financeCurrencySymbol',
-            label: 'Finance Currency Symbol'
-          },
-          {
-            value: 'financebutCoinAddress',
-            label: 'Finance BitCoin Address'
-          },
-          {
-            value: 'financeIBAN',
-            label: 'Finance IBAN'
-          },
-          {
-            value: 'financeBIC',
-            label: 'Finance BIC'
-          },
-          {
-            value: 'domainName',
-            label: 'Domain Name'
-          },         
-          {
-            value: 'freeEmailDomain',
-            label: 'Free Email Domain'
-          },         
-          {
-            value: 'ipv4',
-            label: 'IPv4 Address'
-          },         
-          {
-            value: 'email',
-            label: 'Email'
-          },         
-          {
-            value: 'userName',
-            label: 'UserName'
-          },         
-          {
-            value: 'tld',
-            label: 'Top Level Domain'
-          },
-          {
-            value: 'url',
-            label: 'URL'
-          },                  
-          {
-            value: 'uriPath',
-            label: 'URI Path'
-          },                  
-          {
-            value: 'slug',
-            label: 'Slug'
-          },                  
-          {
-            value: 'uriPage',
-            label: 'URI Page'
-          },                  
-          {
-            value: 'ipv6',
-            label: 'IPV6 Address'
-          },                  
-          {
-            value: 'domainWord',
-            label: 'Domain Word'
-          },         
-        ]
-
-        return optionList
-      },
-      getISBNOptionList: () => {
-        const optionList = [
-          {
-            value: 'isbn10',
-            label: 'ISBN 10'
-          },
-          {
-            value: 'isbn13',
-            label: 'ISBN 13'
-          },          
         ]
 
         return optionList
@@ -698,17 +498,41 @@ const optionUtils = (function() {
      getLoremOptionList: () => {
         const optionList = [
           {
-            value: 'sentence',
-            label: 'Sentence'
+            value: 'loremWord',
+            label: '(Lorem) Word'
           },
           {
-            value: 'paragraph',
-            label: 'Paragraph'
-          },          
+            value: 'loremWords',
+            label: '(Lorem) Words'
+          },
           {
-            value: 'word',
-            label: 'Word'
-          },         
+            value: 'loremSentence',
+            label: '(Lorem) Sentence'
+          },
+          {
+            value: 'loremSlug',
+            label: '(Lorem) Slug'
+          },
+          {
+            value: 'loremSentences',
+            label: '(Lorem) Sentences'
+          },
+          {
+            value: 'loremParagraph',
+            label: '(Lorem) Paragraph'
+          },
+          {
+            value: 'loremParagraphs',
+            label: '(Lorem) Paragraphs'
+          },
+          {
+            value: 'loremText',
+            label: '(Lorem) Text'
+          },
+          {
+            value: 'loremLines',
+            label: '(Lorem) Lines'
+          },
         ]
 
         return optionList
@@ -716,87 +540,49 @@ const optionUtils = (function() {
      getPersonOptionList: () => {
         const optionList = [
           {
-            value: 'prefixFemale',
-            label: 'Prefix Female'
-          },
-          {
-            value: 'firstName',
-            label: 'First Name'
-          },          
-          {
-            value: 'firstNameMale',
-            label: 'First Name Male'
+            value: 'nameFirstName',
+            label: '(Person) First Name'
           },         
           {
-            value: 'name',
-            label: 'Full Name'
-          },
+            value: 'nameLastName',
+            label: '(Person) Last Name'
+          }, 
           {
-            value: 'nameMale',
-            label: 'Full Name Male'
-          },         
+            value: 'nameFullName',
+            label: '(Person) Full Name'
+          }, 
           {
-            value: 'suffix',
-            label: 'Suffix'
-          },         
+            value: 'nameJobTitle',
+            label: '(Person) Job Title'
+          }, 
           {
-            value: 'lastName',
-            label: 'Last Name'
-          },         
+            value: 'namePrefix',
+            label: '(Person) Name Prefix'
+          }, 
           {
-            value: 'firstNameFemale',
-            label: 'First Name Female'
-          },         
+            value: 'nameSuffix',
+            label: '(Person) Name Suffix'
+          }, 
           {
-            value: 'fullNameFemale',
-            label: 'Full Name Female'
-          },         
+            value: 'nameTitle',
+            label: '(Person) Name Title'
+          }, 
           {
-            value: 'prefix',
-            label: 'Prefix'
-          },         
-        ]
-
-        return optionList
-      },
-      getUserAgentOptionList: () => {
-        const optionList = [
+            value: 'namePhoneNumber',
+            label: '(Person) Phone Number'
+          }, 
           {
-            value: 'chrome',
-            label: 'Chrome (User Agent)'
-          },
+            value: 'nameJobDescriptor',
+            label: '(Person) Job Descriptor'
+          }, 
           {
-            value: 'firefox',
-            label: 'FireFox (User Agent)'
-          },          
+            value: 'nameJobArea',
+            label: '(Person) Job Area'
+          }, 
           {
-            value: 'opera',
-            label: 'Opera (User Agent)'
-          },         
-          {
-            value: 'safari',
-            label: 'Safari (User Agent)'
-          },
-          {
-            value: 'internetExplorer',
-            label: 'Internet Explorer (User Agent)'
-          },         
-          {
-            value: 'windowsPlatformToken',
-            label: 'Windows Platform Token'
-          },         
-          {
-            value: 'linuxPlatformToken',
-            label: 'Linux Platform Token'
-          },         
-          {
-            value: 'userAgent',
-            label: 'User Agent'
-          },         
-          {
-            value: 'macPlatformToken',
-            label: 'Mac Plaform Token'
-          },         
+            value: 'nameJobType',
+            label: '(Person) Job Type'
+          }, 
         ]
 
         return optionList
