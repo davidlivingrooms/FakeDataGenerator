@@ -570,12 +570,68 @@ const optionUtils = (function() {
             label: 'URI'
           },         
           {
+            value: 'databaseColumn',
+            label: 'Database Column'
+          },
+          {
+            value: 'databaseType',
+            label: 'Database Type'
+          },
+          {
+            value: 'databaseCollation',
+            label: 'Database Collation'
+          },          
+          {
+            value: 'databaseEngine',
+            label: 'Database Engine'
+          },
+          {
+            value: 'financeAccountNumber',
+            label: 'Finance Account Number'
+          },
+          {
+            value: 'financeAccountName',
+            label: 'Finance Account Name'
+          },
+          {
+            value: 'financeMask',
+            label: 'Finance Mask'
+          },
+          {
+            value: 'financeAccountAmount',
+            label: 'Finance Account Amount'
+          },
+          {
+            value: 'financeTransactionType',
+            label: 'Finance Transaction Type'
+          },
+          {
+            value: 'financeCurrencyCode',
+            label: 'Finance Currency Code'
+          },
+          {
+            value: 'financeCurrencyName',
+            label: 'Finance Currency Name'
+          },
+          {
+            value: 'financeCurrencySymbol',
+            label: 'Finance Currency Symbol'
+          },
+          {
+            value: 'financebutCoinAddress',
+            label: 'Finance BitCoin Address'
+          },
+          {
+            value: 'financeIBAN',
+            label: 'Finance IBAN'
+          },
+          {
+            value: 'financeBIC',
+            label: 'Finance BIC'
+          },
+          {
             value: 'domainName',
             label: 'Domain Name'
-          },         
-          {
-            value: 'companyEmail',
-            label: 'Company Email'
           },         
           {
             value: 'freeEmailDomain',
