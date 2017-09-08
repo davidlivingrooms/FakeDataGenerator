@@ -1,11 +1,18 @@
 const fakeDataGenerator = (function() {
     return {
-      appendAyxTagToTarget: ({targetEl, uiProps}) => {
+      appendAyxTagToTarget: ({targetEl, uiProps, id}) => {
           const ayxTag = document.createElement('ayx')
           ayxTag.setAttribute('data-ui-props', `${JSON.stringify(uiProps)}`)
+          if (id) {
+            ayxTag.id = id
+          }
           targetEl.appendChild(ayxTag)
           return ayxTag
         },
+      updateColumnHeader: (columnName, columnTextBoxId) => {
+        const columnNameTextBox = $(document.getElementById(columnTextBoxId))
+        columnNameTextBox.parent().parent().find('.headerText').text(columnName ? columnName : 'Column')
+      },
       addNewColumn: () => {
         const fieldId = 'Field_' + Math.random() + Date.now()
         fakeDataGenerator.addColumn({fieldId})
@@ -13,8 +20,11 @@ const fakeDataGenerator = (function() {
       deleteColumn: (fieldContainerDataName, event) => {
         const fakeFieldsContainer = window.Alteryx.Gui.Manager.getDataItem('FakeFields')
         if (fakeFieldsContainer.getDataItems().length > 1) {
-          const parent = $(event.target).parent().parent()
-          parent.parent().add(parent).fadeOut('slow',function(){$(this).remove();});
+          const parentElement = $(event.target).parents('.group')[0]
+          // parent.parent().add(parent).fadeOut('slow',function(){$(this).remove();});
+          $(parentElement).fadeOut('slow', function () {
+            $(this).remove()
+          })
 
           // remove data item
           fakeFieldsContainer.removeDataItem(fieldContainerDataName)
@@ -26,10 +36,15 @@ const fakeDataGenerator = (function() {
         const categoryId = 'categoryDropDown' + Math.random() + Date.now()
 
         const header = document.createElement('h3')
-        header.innerText = 'Column'
 
-        // add column container
+        const headerTextSpan = document.createElement('span') 
+        headerTextSpan.className = 'headerText'
+        headerTextSpan.innerText = fieldNameValue ? fieldNameValue : 'Column'
+        header.appendChild(headerTextSpan)
+
+        // add container
         const container = document.createElement('div')
+        container.className = 'group'
 
         // add column container
         const columnContainer= document.createElement('div')
@@ -48,7 +63,8 @@ const fakeDataGenerator = (function() {
 
         fakeDataGenerator.appendAyxTagToTarget({
           targetEl: columnContainer,
-          uiProps: textBoxUIProps
+          uiProps: textBoxUIProps,
+          id: fieldNameId,
         })
 
         // add category dropdown label
@@ -97,8 +113,6 @@ const fakeDataGenerator = (function() {
           uiProps: deleteColumnButtonProps,
         })
 
-        buttonTag.onclick = fakeDataGenerator.deleteColumn.bind(this, fieldId)
-
         container.appendChild(header)
         container.appendChild(columnContainer)
 
@@ -106,6 +120,7 @@ const fakeDataGenerator = (function() {
 
         // render the row so that the widget id is available
         window.Alteryx.Gui.Manager.addWidget(columnContainer)
+        window.Alteryx.Gui.Manager.setProp(buttonId, 'onClick', fakeDataGenerator.deleteColumn.bind(this, fieldId))
         $( "#accordion" ).accordion( "refresh" )
 
         const alteryxDataItems = window.Alteryx.Gui.FakeDataGenerator.AlteryxDataItems
@@ -115,12 +130,28 @@ const fakeDataGenerator = (function() {
         const fieldContainer = new alteryxDataItems.DataItemContainer(fieldId)
 
         const simpleString = new alteryxDataItems.SimpleString('FieldName')
+
+        simpleString.registerPropertyListener('value', function (event) {
+          fakeDataGenerator.updateColumnHeader(event.value, fieldNameId)
+        })
+
         if (fieldNameValue) {
           simpleString.setValue(fieldNameValue)
         }
 
+        // set up category data item
+        const categoryStringSelector = new alteryxDataItems.StringSelector('Category')
+        categoryStringSelector.setOptionList(optionUtils.getGeneratorCategoryOptionList())
+        // set up provider data item
         const stringSelector = new alteryxDataItems.StringSelector('Provider')
-        stringSelector.setOptionList(fakeDataGenerator.getGeneratorTypeOptionList())
+        stringSelector.setOptionList(optionUtils.getAllOptions())
+
+        categoryStringSelector.registerPropertyListener('value', (event) => {
+          // clear and update the provider dropdown when the category changes
+          stringSelector.setOptionList(optionUtils.getGeneratorOptionListByCategory(event.value))
+          stringSelector.setValue('')
+        })
+        categoryStringSelector.setValue(categoryValue ? categoryValue : 'all')
 
         if (providerValue) {
           stringSelector.setValue(providerValue)
@@ -128,8 +159,10 @@ const fakeDataGenerator = (function() {
 
         manager.bindDataItemToWidget(simpleString, fieldNameId)
         manager.bindDataItemToWidget(stringSelector, providerId)
+        manager.bindDataItemToWidget(categoryStringSelector, categoryId)
         fieldContainer.addDataItem(simpleString)
         fieldContainer.addDataItem(stringSelector)
+        fieldContainer.addDataItem(categoryStringSelector)
         manager.getDataItem('FakeFields').addDataItem(fieldContainer)
       },
     }

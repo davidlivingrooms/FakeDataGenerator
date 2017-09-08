@@ -49,14 +49,27 @@ const optionUtils = (function() {
             return optionUtils.getUserAgentOptionList()
             break
           default:
-            console.error('Unrecognized category type.')
+            console.error('Unrecognized category type: ' + category)
             break
         }
 
         return optionList
       },
       getAllOptions: () => {
-        return optionUtils.getAddressOptionList()
+        return optionUtils.getAddressOptionList().concat(
+          optionUtils.getBarcodeOptionList(),
+          optionUtils.getColorOptionList(),
+          optionUtils.getCompanyOptionList(),
+          optionUtils.getCreditCardOptionList(),
+          optionUtils.getCurrencyOptionList(),
+          optionUtils.getDateTimeOptionList(),
+          optionUtils.getFileOptionList(),
+          optionUtils.getInternetOptionList(),
+          optionUtils.getISBNOptionList(),
+          optionUtils.getLoremOptionList(),
+          optionUtils.getMiscellaniousOptionList(),
+          optionUtils.getPersonOptionList(),
+          optionUtils.getUserAgentOptionList()).sort(optionUtils.optionSorter)
       },
       getGeneratorCategoryOptionList: () => {
         const optionList = [
@@ -81,7 +94,7 @@ const optionUtils = (function() {
             label: 'Company'
           },
           {
-            value: 'credCard',
+            value: 'creditCard',
             label: 'Credit Card'
           },
           {
@@ -89,7 +102,7 @@ const optionUtils = (function() {
             label: 'Currency'
           },
           {
-            value: 'dataTime',
+            value: 'dateTime',
             label: 'Date Time'
           },
           {
@@ -105,10 +118,6 @@ const optionUtils = (function() {
             label: 'ISBN'
           },
           {
-            value: 'job',
-            label: 'Job'
-          },
-          {
             value: 'lorem',
             label: 'Lorem Ipsum'
           },
@@ -119,10 +128,6 @@ const optionUtils = (function() {
           {
             value: 'person',
             label: 'Person'
-          },
-          {
-            value: 'phoneNumber',
-            label: 'Phone Number'
           },
           {
             value: 'userAgent',
@@ -153,10 +158,6 @@ const optionUtils = (function() {
           {
             value: 'uuid4',
             label: 'UUID4'
-          },
-          {
-            value: 'binary',
-            label: 'Binary'
           },
           {
             value: 'password',
@@ -196,6 +197,34 @@ const optionUtils = (function() {
             value: 'country',
             label: 'Country'
           },
+          {
+            value: 'county',
+            label: 'County'
+          },
+          {
+            value: 'department',
+            label: 'Department'
+          },
+          {
+            value: 'productName',
+            label: 'Product Name'
+          },          
+          {
+            value: 'price',
+            label: 'Price'
+          },          
+          {
+            value: 'productAdjective',
+            label: 'Product Adjective'
+          },          
+          {
+            value: 'productMaterial',
+            label: 'Product Material'
+          },          
+          {
+            value: 'product',
+            label: 'Product'
+          },          
           {
             value: 'cityPrefix',
             label: 'City Prefix'
@@ -245,16 +274,16 @@ const optionUtils = (function() {
             label: 'Street Suffix'
           },
           {
+            value: 'streetPrefix',
+            label: 'Street Prefix'
+          },
+          {
             value: 'streetAddress',
             label: 'Street Address'
           },
           {
             value: 'latitude',
             label: 'Latitude'
-          },
-          {
-            value: 'zipCodePlus4',
-            label: 'Zip+4'
           },
           {
             value: 'state',
@@ -334,7 +363,7 @@ const optionUtils = (function() {
           },
           {
             value: 'safeHexColor',
-            label: 'Sage Hex Color'
+            label: 'Safe Hex Color'
           },
           {
             value: 'rgbColor',
@@ -370,21 +399,23 @@ const optionUtils = (function() {
         const optionList = [
           {
             value: 'securityCode',
-            label: 'Security Code'
+            label: 'Credit Card Security Code'
           },
           {
             value: 'number',
-            label: 'Number'
+            label: 'Credit Card Number'
           },
           {
             value: 'provider',
-            label: 'Provider'
-          },          {
+            label: 'Credit Card Provider'
+          },          
+          {
             value: 'expirationDate',
-            label: 'Expiration Date'
-          },          {
+            label: 'Credit Card Expiration Date'
+          },          
+          {
             value: 'full',
-            label: 'Full Info'
+            label: 'Credit Card Full Info'
           },
         ]
 
@@ -700,7 +731,7 @@ const optionUtils = (function() {
           },         
           {
             value: 'linuxPlatformToken',
-            label: 'Windows Platform Token'
+            label: 'Linux Platform Token'
           },         
           {
             value: 'userAgent',

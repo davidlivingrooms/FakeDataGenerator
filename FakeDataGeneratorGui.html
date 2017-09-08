@@ -34,10 +34,10 @@
       <legend class='blueTitle'>Column Builder</legend>
       <div id="accordion">
         <div class="group">
-          <h3>Column</h3>
+          <h3><span class="headerText">Column</span></h3>
           <div >
             <label>Column Name</label>
-            <ayx data-ui-props="{type: 'TextBox', widgetId: 'fieldNameTextBox', 'placeholder': 'Enter new column name here'}"></ayx>
+            <ayx id="fieldNameTextBox" data-ui-props="{type: 'TextBox', widgetId: 'fieldNameTextBox', 'placeholder': 'Enter new column name here'}"></ayx>
             <label>Category</label>
             <ayx data-ui-props="{type: 'DropDown', widgetId: 'categoryDropDown'}"></ayx>
             <label>Fake Data Type</label>
@@ -71,7 +71,7 @@
 
       const configuration = json.Configuration
       let fieldContainerName = ''
-      if (configuration && Object.keys(configuration.FakeFields).length === 1) {
+      if (configuration && Object.keys(configuration.FakeFields).length) {
         fieldContainerName = Object.keys(configuration.FakeFields)[0]
       } else {
         fieldContainerName = 'Field'
@@ -80,18 +80,29 @@
       // each field will be in its own data item container
       const fieldContainer = new AlteryxDataItems.DataItemContainer(fieldContainerName)
       const simpleString = new AlteryxDataItems.SimpleString('FieldName')
+
+      simpleString.registerPropertyListener('value', function (event) {
+        fakeDataGenerator.updateColumnHeader(event.value, 'fieldNameTextBox')
+      })
+
       const categoryStringSelector= new AlteryxDataItems.StringSelector('Category')
       const providerStringSelector = new AlteryxDataItems.StringSelector('Provider')
       categoryStringSelector.setOptionList(optionUtils.getGeneratorCategoryOptionList())
-      categoryStringSelector.setValue('all')
       providerStringSelector.setOptionList(optionUtils.getGeneratorOptionListByCategory('all'))
+
+      categoryStringSelector.registerPropertyListener('value', (event) => {
+        // clear and update the provider dropdown when the category changes
+        providerStringSelector.setOptionList(optionUtils.getGeneratorOptionListByCategory(event.value))
+        providerStringSelector.setValue('')
+      })
+
+      categoryStringSelector.setValue('all')
       manager.bindDataItemToWidget(simpleString, 'fieldNameTextBox')
       manager.bindDataItemToWidget(categoryStringSelector, 'categoryDropDown')
       manager.bindDataItemToWidget(providerStringSelector, 'providerComboBox')
       fieldContainer.addDataItem(simpleString)
       fieldContainer.addDataItem(categoryStringSelector)
       fieldContainer.addDataItem(providerStringSelector)
-
       fakeFieldContainer.addDataItem(fieldContainer)
 
       // make sure button is properly bound to delete the first one
@@ -103,11 +114,11 @@
         if (Object.keys(configuration.FakeFields).length > 1) {
           const fakeFields = configuration.FakeFields
           Object.keys(fakeFields).forEach(function (key) {
-            if (key === 'Field') return // the first one is already in the html and has a data item
+            if (key === fieldContainerName) return // the first one is already in the html and has a data item
             const field = fakeFields[key]
             // add widgets
             fakeDataGenerator.addColumn({
-              category: field.Category,
+              categoryValue: field.Category,
               providerValue: field.Provider,
               fieldNameValue: field.FieldName,
               fieldId: key
@@ -119,43 +130,31 @@
 
   </script>
   <script>
-  $( function() {
-    $( "#accordion" ).accordion({
-        collapsible: true,
-        heightStyle: 'content',
-        clearStyle: true,        
-        autoHeight: true,
-        header: "> div > h3",        
-        create: function( event, ui ) {
-        if (ui.panel[0]) {
-            ui.panel[0].style.overflow = 'visible'
-          }
-        },        
-        beforeActivate: function( event, ui ) {
-          if (ui.oldPanel[0]) {
-            ui.oldPanel[0].style.overflow = 'auto'
-          }
+    $( function() {
+      $( "#accordion" ).accordion({
+          collapsible: true,
+          heightStyle: 'content',
+          clearStyle: true,        
+          autoHeight: true,
+          header: "> div > h3",        
+          create: function( event, ui ) {
+          if (ui.panel[0]) {
+              ui.panel[0].style.overflow = 'visible'
+            }
+          },        
+          beforeActivate: function( event, ui ) {
+            if (ui.oldPanel[0]) {
+              ui.oldPanel[0].style.overflow = 'auto'
+            }
 
-          if (ui.newPanel[0]) {
-            ui.newPanel[0].style.overflow = 'visible'
-          }
-        },  
+            if (ui.newPanel[0]) {
+              ui.newPanel[0].style.overflow = 'visible'
+            }
+          },  
+      })
     })
-  })
-
-$('span.ui-icon-trash').click(function(e) {
-
-})
-
   </script>
   <style>
-    /*This styling needs to be here. Is due to file loading. Otherwise, will not get proper styling on dropdowns*/
-
-    .Select, .Select div, .Select input, .Select span {
-      box-sizing: content-box;
-      -webkit-box-sizing: content-box;
-    }
-
     .accordion-add {
       background-image: url('./img/add.png');
       background-repeat: no-repeat;
@@ -165,6 +164,7 @@ $('span.ui-icon-trash').click(function(e) {
       background-size: 14px;
       background-position: 3px;
       margin-left: calc(100% - 20px);
+      margin-top: 5px;
       cursor: pointer;
       clear: both;
     }
@@ -187,6 +187,9 @@ $('span.ui-icon-trash').click(function(e) {
       color: white;
     }
 
+    .headerText {
+      float: none;
+    }
   </style>
 </body>
 </html>
