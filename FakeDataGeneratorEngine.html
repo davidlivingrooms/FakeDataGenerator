@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script>
+        // Include version 1 of the engine base library.
+        document.write('<link rel="import" href="' + window.Alteryx.LibDir + '1/lib/alteryx/engine/includes.html">');
+    </script>
+    <script src = "./vendor/faker.min.js" type = "text/javascript"></script>
+    <script src = "engineUtil.js" type = "text/javascript"></script>
+
+
+    <script>
+        const lowQualityTypes = [
+            'LEADING_SPACE',
+            'TRAILING_SPACE',
+            'EMPTY',
+            'NULL',
+        ]
+
+        let numRecords = 0
+        let fakeFields = {}
+        let locale = ''
+        // let fake = null
+        let isInChaosMode = false
+        let probabilityOfLowQualityData = 0
+        let outputRecordInfo = {
+            Field: []
+        }
+
+        // var randomName = faker.name.findName(); // Caitlyn Kerluke
+//   var randomEmail = faker.internet.email(); // Rusty@arne.info
+//   var randomCard = faker.helpers.createCard();
+        /**
+         * This function defines our input and output connections.
+         * It must match the input and output connections defined in the GUI plugin's XML file.
+         */
+        Alteryx.Plugin.DefineConnections = function()
+        {
+            return {
+                IncomingConnections: [],
+                OutgoingConnections: [{
+                    name: "Output"
+                }]
+            };
+        };
+
+        /**
+         * Called at the beginning of plugin lifetime with the plugin's configuration properties.
+         * This implementation contains example code that prints each configuration key/value pair as
+         * an engine output message.
+         *
+         * @params config The plugin's configuration.
+         */
+        Alteryx.Plugin.PI_Init = function(config)
+        {
+            Alteryx.Engine.SendMessage.Info('Config properties:');
+
+            for (var i in config.Configuration) {
+                Alteryx.Engine.SendMessage.Info(i + ": " + config.Configuration[i]);
+            }
+
+            const configuration = config.Configuration
+            numRecords =  configuration.NumRecords
+            fakeFields = configuration.FakeFields
+            locale = configuration.Locale
+            isInChaosMode = configuration.ChaosMode
+            probabilityOfLowQualityData = 100 - configuration.DataQualityPercentage
+            fakeFields = configuration.FakeFields
+
+            // populate the outputRecordInfo object
+            Object.values(fakeFields).forEach((field) => {
+                engineUtil.outputMessage('fieldName: ' + field.FieldName)    
+                outputRecordInfo.Field.push({
+                    name: field.FieldName,
+                    type: "V_WString",
+                    size: 999999,
+                })
+            })
+
+            Alteryx.Engine.SendMessage.RecordInfo("Output", outputRecordInfo)
+        };
+
+        /**
+         * If the tool has no input:
+         *    PI_PushAllRecords is called instead of the II functions.
+         *    It is also called at configure time with a record limit of 0.
+         *
+         * If this function is implemented, all code paths must signal completion with a call to
+         *    Alteryx.Engine.SendMessage.Complete()
+u         * @param recordlimit the maximum number of records that this function should return.
+         */
+        Alteryx.Plugin.PI_PushAllRecords = function(recordLimit) {
+            Alteryx.Engine.SendMessage.Info('Record Limit: ' + recordLimit)
+            const engineRecordLimit = recordLimit.RecordLimit
+            //if (engineRecordLimit > 0 && engineRecordLimit < 9223372036854776000) {
+                //globalConfig.RecordLimit = engineRecordLimit;
+            //}
+            const records = []
+            for (let i = 0; i < numRecords; i++) {
+                const row = []
+                Object.values(fakeFields).forEach((fakeField) => {
+                    if (isInChaosMode && engineUtil.shouldGiveLowQualityValue(probabilityOfLowQualityData)) {
+                        engineUtil.outputMessage('should chaotically set value')
+                    } else {
+                        row.push(engineUtil.getGeneratedValueFromProvider(fakeField.Provider))
+                    }
+                })
+                records.push(row)
+            }
+
+            Alteryx.Engine.SendMessage.PushRecords('Output', records)
+            Alteryx.Engine.SendMessage.Complete()
+        }
+
+        /**
+         * PI_Close is called with no arguments at the end of the plugin's lifetime.
+         * All code paths must terminate with a call to Alteryx.Engine.SendMessage.PI_Close()
+         */
+        Alteryx.Plugin.PI_Close = function()
+        {
+            Alteryx.Engine.SendMessage.PI_Close();
+        };
+
+    </script>
+</head>
+<body>
+</body>
+</html>

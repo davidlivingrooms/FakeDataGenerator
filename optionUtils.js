@@ -198,6 +198,34 @@ const optionUtils = (function() {
             label: 'Country'
           },
           {
+            value: 'county',
+            label: 'County'
+          },
+          {
+            value: 'department',
+            label: 'Department'
+          },
+          {
+            value: 'productName',
+            label: 'Product Name'
+          },          
+          {
+            value: 'price',
+            label: 'Price'
+          },          
+          {
+            value: 'productAdjective',
+            label: 'Product Adjective'
+          },          
+          {
+            value: 'productMaterial',
+            label: 'Product Material'
+          },          
+          {
+            value: 'product',
+            label: 'Product'
+          },          
+          {
             value: 'cityPrefix',
             label: 'City Prefix'
           },
@@ -246,16 +274,16 @@ const optionUtils = (function() {
             label: 'Street Suffix'
           },
           {
+            value: 'streetPrefix',
+            label: 'Street Prefix'
+          },
+          {
             value: 'streetAddress',
             label: 'Street Address'
           },
           {
             value: 'latitude',
             label: 'Latitude'
-          },
-          {
-            value: 'zipCodePlus4',
-            label: 'Zip+4'
           },
           {
             value: 'state',

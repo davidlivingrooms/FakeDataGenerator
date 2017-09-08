@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <AlteryxJavaScriptPlugin>
-  <EngineSettings EngineDll="Python" EngineDllEntryPoint="FakeDataGeneratorEngine.py" SDKVersion="10.1" />
+  <EngineSettings EngineDll="HTML" EngineDllEntryPoint="FakeDataGeneratorEngine.html" SDKVersion="10.1" />
   <GuiSettings Html="FakeDataGeneratorGui.html" Icon="FakeDataGeneratorIcon.png" Help="PythonSDKExample.htm" SDKVersion="10.1">
     <!--<InputConnections>-->
       <!--<Connection Name="Input" AllowMultiple="False" Optional="False" Type="Connection" Label=""/>-->
