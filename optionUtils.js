@@ -448,6 +448,10 @@ const optionUtils = (function() {
             label: '(Internet) Email'
           },
           {
+            value: 'internetExampleEmail',
+            label: '(Internet) Example Email'
+          },
+          {
             value: 'internetUserName',
             label: '(Internet) UserName'
           },          
@@ -483,6 +487,10 @@ const optionUtils = (function() {
             value: 'internetUserAgent',
             label: '(Internet) User Agent'
           },        
+          {
+            value: 'internetColor',
+            label: '(Internet) Color'
+          },
           {
             value: 'internetMacAddress',
             label: '(Internet) Mac Address'
